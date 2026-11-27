@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - College Bus Pass</title>
+</head>
+<body>
+
+    <h1>College Bus Pass</h1>
+
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+
+    <p>Enter your college registration number.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>College Registration Number</label>
+        <input type="text" name="registration_number" required>
+
+        <button type="submit">
+            Verify with UMIS
+        </button>
+    </form>
+
+</body>
+</html>

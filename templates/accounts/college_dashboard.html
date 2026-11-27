@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>YOVAA - College Student Dashboard</title>
+	<link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+</head>
+<body class="college-page">
+<div class="college-shell">
+	<aside class="college-sidebar">
+		<img class="college-logo" src="{% static 'images/yovaa-transit-logo.svg' %}" alt="YOVAA Transit">
+		<div class="college-sidebar-label">Main menu</div>
+		<nav class="college-nav">
+			<a class="active" href="{% url 'college_dashboard' %}"><span>▦</span> Dashboard</a>
+			<a href="{% url 'user_dashboard' %}"><span>◷</span> My Applications</a>
+		</nav>
+		<div class="college-sidebar-label">My pass</div>
+		<nav class="college-nav">
+			<a href="{% url 'college_tracking' %}"><span>▣</span> E-Pass</a>
+		</nav>
+		<div class="college-user"><strong>{{ request.user.first_name }}</strong><small>College Student</small></div>
+	</aside>
+
+	<main class="college-main">
+		<header class="college-header">
+			<div><h1>College Student Dashboard</h1><p>Manage your applications and digital bus pass</p></div>
+			<div class="college-avatar"><span class="college-avatar-mark">CS</span><span>{{ request.user.first_name }}<br><small>College Student</small></span></div>
+		</header>
+		<section class="college-welcome"><h2>Welcome back, {{ request.user.first_name }}</h2><p>Here is what is happening with your college bus pass.</p></section>
+
+		<section class="college-stats">
+			<article class="college-stat"><span class="college-stat-icon">⊙</span><span class="college-stat-label">Total Applications</span><strong class="college-stat-value">{{ total }}</strong><span class="college-stat-note">Applications submitted</span></article>
+			<article class="college-stat"><span class="college-stat-icon">⌛</span><span class="college-stat-label">In Process</span><strong class="college-stat-value">{{ pending_count }}</strong><span class="college-stat-note">Awaiting verification</span></article>
+			<article class="college-stat"><span class="college-stat-icon">✓</span><span class="college-stat-label">Approved</span><strong class="college-stat-value">{{ approved_count }}</strong><span class="college-stat-note">Applications approved</span></article>
+			<article class="college-stat"><span class="college-stat-icon">▣</span><span class="college-stat-label">E-Passes</span><strong class="college-stat-value">{{ epass_count }}</strong><span class="college-stat-note">Digital passes issued</span></article>
+		</section>
+
+		<section class="college-modules">
+			<a class="college-module" href="/users/apply/college/"><span>🚌</span><strong>New Application</strong><span>Start a fresh college pass</span></a>
+			<a class="college-module" href="{% url 'college_tracking' %}"><span>🔄</span><strong>Renewal</strong><span>Check expired or renewable passes</span></a>
+			<a class="college-module" href="{% url 'college_tracking' %}"><span>📋</span><strong>My Applications</strong><span>View your active records</span></a>
+			<a class="college-module" href="{% url 'college_tracking' %}"><span>🎫</span><strong>E-Pass</strong><span>View your digital pass</span></a>
+		</section>
+
+		<section class="college-content">
+			<article class="college-panel">
+				<div class="college-panel-head"><div><h3>Recent Applications</h3><p>Your latest college pass applications</p></div><a href="{% url 'college_tracking' %}">View all →</a></div>
+				<div class="college-applications">
+					{% for application in applications|slice:":5" %}<a class="college-application-row" href="{% url 'college_application_tracking' application.id %}"><div><strong>{{ application.application_number }}</strong><small>{{ application.route }} · {{ application.created_at|date:"d M Y" }}</small></div><span class="status">{{ application.get_status_display }}</span></a>{% empty %}<p>No applications yet. Start a new college pass application.</p>{% endfor %}
+				</div>
+			</article>
+			<article class="college-panel"><div class="college-panel-head"><div><h3>Quick Actions</h3><p>Frequently used options</p></div></div><div style="padding:24px"><p><a href="{% url 'user_dashboard' %}">View My Applications →</a></p><p><a href="{% url 'college_tracking' %}">Track My Applications →</a></p><p><a href="{% url 'college_tracking' %}">View E-Pass →</a></p></div></article>
+		</section>
+	</main>
+</div>
+</body>
+</html>

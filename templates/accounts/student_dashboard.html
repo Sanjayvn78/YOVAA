@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YOVAA - {{ dashboard_type|title }} Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+</head>
+<body class="dashboard-page">
+<header class="dashboard-header">
+    <div class="dashboard-header-inner">
+        {% include "partials/yovaa_brand.html" %}
+        <div class="dashboard-header-title">
+            <h1>{% if dashboard_type == "COLLEGE" %}College Bus Pass System{% elif dashboard_type == "DISABLED" %}Disabled Person Bus Pass System{% elif dashboard_type == "SPECIAL" %}Special Bus Pass System{% else %}General Bus Pass System{% endif %}</h1>
+            <p>Apply, verify, track and manage your digital bus pass.</p>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a class="button secondary" href="{% url 'home' %}">&larr; Back to Home</a>
+            <a class="button" href="{% url 'account_logout' %}">Logout</a>
+        </div>
+    </div>
+</header>
+<main class="dashboard-main">
+    <section class="dashboard-profile">
+        <div>
+            <h2>Welcome, {{ request.user.first_name }}</h2>
+            <p>Everything about your YOVAA bus pass in one place.</p>
+        </div>
+        <div class="dashboard-profile-meta">
+            {% if dashboard_type == "COLLEGE" %}
+                <span class="dashboard-meta-chip">Registration: {{ profile.registration_number }}</span>
+                <span class="dashboard-meta-chip">{{ dataset.college_name|default:"College student" }}</span>
+            {% elif dashboard_type == "DISABLED" %}
+                <span class="dashboard-meta-chip">Disability ID: {{ profile.disability_id }}</span>
+            {% elif dashboard_type == "SPECIAL" %}
+                <span class="dashboard-meta-chip">Staff number: {{ profile.staff_number }}</span>
+            {% else %}
+                <span class="dashboard-meta-chip">Phone: {{ profile.phone_number }}</span>
+            {% endif %}
+        </div>
+    </section>
+    <section class="dashboard-stats">
+        <article class="dashboard-stat"><small>Total applications</small><strong>{{ total }}</strong></article>
+        <article class="dashboard-stat"><small>In verification</small><strong>{{ pending_count }}</strong></article>
+        <article class="dashboard-stat"><small>Approved</small><strong>{{ approved_count }}</strong></article>
+        <article class="dashboard-stat"><small>E-Passes</small><strong>{{ epass_count }}</strong></article>
+    </section>
+    {% if dashboard_type == "COLLEGE" %}
+    <section class="dashboard-section">
+        <div class="dashboard-section-header"><div><h2>Application Process</h2><p>Current status of your college bus pass request.</p></div></div>
+        {% with latest_application=applications|first %}
+        <div class="verification-track" style="margin-top: 18px;">
+            <div class="track-step {% if not latest_application or latest_application.status in 'COLLEGE_VERIFICATION,TRANSPORT_VERIFICATION,PAYMENT_PENDING,PAYMENT_COMPLETED,COLLEGE_APPROVED' %}completed{% endif %}">
+                <strong>Application Submitted</strong>
+                <small>Your application was received</small>
+            </div>
+            <div class="track-step {% if latest_application and latest_application.status == 'TRANSPORT_VERIFICATION' %}current{% elif latest_application and latest_application.status in 'COLLEGE_VERIFICATION,PAYMENT_PENDING,PAYMENT_COMPLETED,COLLEGE_APPROVED' %}completed{% endif %}">
+                <strong>Transport Verification</strong>
+                <small>{% if latest_application and latest_application.status == 'TRANSPORT_VERIFICATION' %}In progress{% else %}Checking application details{% endif %}</small>
+            </div>
+            <div class="track-step {% if latest_application and latest_application.status == 'COLLEGE_VERIFICATION' %}current{% elif latest_application and latest_application.status in 'PAYMENT_PENDING,PAYMENT_COMPLETED,COLLEGE_APPROVED' %}completed{% endif %}">
+                <strong>College Verification</strong>
+                <small>{% if latest_application and latest_application.status == 'COLLEGE_VERIFICATION' %}In progress{% else %}College approval stage{% endif %}</small>
+            </div>
+            <div class="track-step {% if latest_application and latest_application.status == 'PAYMENT_PENDING' %}current{% elif latest_application and latest_application.status == 'PAYMENT_COMPLETED' %}completed{% endif %}">
+                <strong>Payment</strong>
+                <small>{% if latest_application and latest_application.status == 'PAYMENT_PENDING' %}Payment pending{% elif latest_application and latest_application.status == 'PAYMENT_COMPLETED' %}Payment completed{% else %}Awaiting payment{% endif %}</small>
+            </div>
+            <div class="track-step {% if latest_application and latest_application.status == 'PAYMENT_COMPLETED' %}completed{% endif %}">
+                <strong>E-Pass</strong>
+                <small>{% if latest_application and latest_application.status == 'PAYMENT_COMPLETED' %}E-Pass available{% else %}Will be available after payment{% endif %}</small>
+            </div>
+        </div>
+        {% endwith %}
+    </section>
+    {% endif %}
+    <section class="dashboard-actions">
+        {% if dashboard_type == "COLLEGE" %}
+        <article class="dashboard-action"><div><h3>New Application</h3><p>Start a fresh college pass application.</p></div><a class="button" href="{% url 'college_apply' %}">Start new application</a></article>
+        <article class="dashboard-action"><div><h3>Renewal</h3><p>Review your current pass and renewal options.</p></div><a class="button secondary" href="{% url 'college_tracking' %}">Check renewal</a></article>
+        {% else %}
+        <article class="dashboard-action"><div><h3>New Bus Pass</h3><p>Start a new verified pass application.</p></div>{% if dashboard_type == "DISABLED" %}<a class="button" href="/users/apply/disabled/">New Apply</a>{% elif dashboard_type == "SPECIAL" %}<a class="button" href="/users/apply/special/">New Apply</a>{% else %}<a class="button" href="/users/apply/general/">New Apply</a>{% endif %}</article>
+        {% endif %}
+        <article class="dashboard-action"><div><h3>My Applications</h3><p>Follow every verification stage.</p></div><a class="button secondary" href="{% url 'user_dashboard' %}">View Applications</a></article>
+    </section>
+    <section class="dashboard-section">
+        <div class="dashboard-section-header"><div><h2>Recent Applications</h2><p>Latest activity from your YOVAA account.</p></div>{% if dashboard_type == "COLLEGE" %}<a href="{% url 'college_tracking' %}">View all</a>{% endif %}</div>
+        {% for application in applications|slice:":5" %}
+            <article class="dashboard-application">
+                <div><strong>{{ application.application_number }}</strong><small>{{ application.created_at|date:"d M Y" }}</small></div>
+                <div><small>{{ application.start_point }} to {{ application.destination_point }}</small></div>
+                <span class="status">{{ application.get_status_display }}</span>
+                {% if application.status == "PAYMENT_COMPLETED" and application.epass %}<small>Valid until: {{ application.epass.renewal_valid_until|date:"d M Y" }}</small>{% endif %}
+                {% if application.status == "PAYMENT_PENDING" %}<a href="/users/payment/{{ application.id }}/">Pay now</a>{% elif application.status == "PAYMENT_COMPLETED" %}<a href="/users/epass/{{ application.id }}/">View E-Pass</a><a href="/users/epass/{{ application.id }}/download/">Download Your ePass</a>{% if application.epass.valid_until < today %}<a href="{% url 'renew_pass' application.id %}">Renew</a>{% endif %}{% endif %}
+            </article>
+        {% empty %}<p>No applications yet. Start a new bus pass application above.</p>{% endfor %}
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - UMIS Verification</title>
+</head>
+<body><main class="page-shell"><header class="page-header">{% include "partials/yovaa_brand.html" %}<span class="eyebrow">UMIS verification</span></header>
+<section class="card verification-card">
+    <div class="success-icon">✓</div>
+    <h1>UMIS Verification Successful</h1>
+    <p>Your student record has been verified. Review the details below before continuing.</p>
+    <div class="detail-grid">
+        <div class="detail-item"><small>Registration Number</small><strong>{{ student.registration_number }}</strong></div>
+        <div class="detail-item"><small>Name</small><strong>{{ student.name }}</strong></div>
+        <div class="detail-item"><small>College</small><strong>{{ student.college_name }}</strong></div>
+        <div class="detail-item"><small>Department</small><strong>{{ student.department }}</strong></div>
+        <div class="detail-item"><small>Course</small><strong>{{ student.course }}</strong></div>
+        <div class="detail-item"><small>Academic Year</small><strong>{{ student.academic_year }}</strong></div>
+        <div class="detail-item"><small>Status</small><strong>{% if student.is_active %}Active{% else %}Inactive{% endif %}</strong></div>
+    </div>
+    <p class="verification-state">Student verified through UMIS</p>
+    <form method="GET" action="{% url 'college_details' %}">
+        {% csrf_token %}
+        <input type="hidden" name="student_id" value="{{ student.id }}">
+        <button type="submit">Continue Application</button>
+    </form>
+</section></main></body>
+</html>

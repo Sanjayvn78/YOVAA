@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+    <title>YOVAA - E-Pass</title>
+</head>
+<body><main class="page-shell">
+    <header class="page-header">{% include "partials/yovaa_brand.html" %}<span class="eyebrow">Digital pass</span></header>
+    <section class="pass-card">
+    <h1>Digital Bus Pass</h1>
+    <hr>
+
+    <p><strong>Pass Number:</strong> {{ pass_obj.pass_number }}</p>
+    <p><strong>Application Number:</strong> {{ pass_obj.application.application_number }}</p>
+    <p><strong>Name:</strong> {{ pass_obj.application.full_name }}</p>
+    <p><strong>Pass Type:</strong> {{ pass_obj.application.get_pass_type_display }}</p>
+    {% if pass_obj.application.pass_type == "DISABLED" %}
+    <p><strong>Valid Area:</strong> Valid only within {{ pass_obj.application.district|default:"the selected district" }} district</p>
+    {% else %}
+    <p><strong>Route:</strong> {{ pass_obj.application.route }}</p>
+    <p><strong>Starting Point:</strong> {{ pass_obj.application.start_point }}</p>
+    <p><strong>Destination:</strong> {{ pass_obj.application.destination_point }}</p>
+    {% endif %}
+    <p><strong>Valid From:</strong> {{ pass_obj.valid_from|default:pass_obj.issue_date }}</p>
+    <p><strong>E-Pass Valid Until:</strong> {{ pass_obj.valid_until|default:pass_obj.expiry_date }}</p>
+    <p><strong>QR Valid Until:</strong> {{ pass_obj.expiry_date }}</p>
+
+    <h3>QR Code</h3><!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    {% load static %}
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>YOVAA - Digital Bus Pass</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #eef6fc;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 30px;
+            color: #173b63;
+        }
+
+
+        /* =========================================
+           MAIN PAGE
+        ========================================= */
+
+        .page-shell {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+
+        /* =========================================
+           E-PASS CARD
+        ========================================= */
+
+        .pass-card {
+
+            width: 1100px;
+            min-height: 700px;
+
+            background: #ffffff;
+
+            border: 3px solid #145da0;
+            border-radius: 28px;
+
+            position: relative;
+            overflow: hidden;
+
+            padding: 35px 40px;
+
+            box-shadow:
+                0 15px 40px rgba(0, 70, 130, 0.18);
+        }
+
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        .pass-header {
+
+            width: calc(100% - 290px);
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            position: relative;
+            z-index: 10;
+        }
+
+
+        .brand-name {
+
+            font-size: 72px;
+
+            font-weight: 900;
+
+            letter-spacing: -5px;
+
+            color: #084c91;
+
+            line-height: 0.9;
+        }
+
+
+        .brand-subtitle {
+
+            margin-top: 12px;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            letter-spacing: 5px;
+
+            color: #18558f;
+        }
+
+
+        .tagline {
+
+            border-left: 3px solid #176eb5;
+
+            padding-left: 22px;
+
+            font-size: 24px;
+
+            color: #0b4f91;
+
+            font-style: italic;
+
+            line-height: 1.3;
+        }
+
+
+        /* =========================================
+           RIGHT SIDE
+        ========================================= */
+
+        .right-panel {
+
+            position: absolute;
+
+            top: 35px;
+            right: 35px;
+
+            width: 250px;
+
+            z-index: 20;
+        }
+
+
+        /* =========================================
+           STUDENT PHOTO
+        ========================================= */
+
+        .student-photo {
+
+            width: 250px;
+            height: 260px;
+
+            padding: 7px;
+
+            background: #eaf4ff;
+
+            border: 4px solid #145da0;
+
+            border-radius: 22px;
+
+            overflow: hidden;
+        }
+
+
+        .student-photo img {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            border-radius: 14px;
+        }
+
+
+        /* =========================================
+           QR CODE
+        ========================================= */
+
+        .qr-box {
+
+            width: 250px;
+            height: 250px;
+
+            margin-top: 22px;
+
+            padding: 18px;
+
+            background: white;
+
+            border: 4px solid #145da0;
+
+            border-radius: 22px;
+
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        .qr-box img {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: contain;
+        }
+
+
+        .qr-error {
+
+            text-align: center;
+
+            font-size: 17px;
+
+            font-weight: bold;
+
+            color: #777;
+        }
+
+
+        /* =========================================
+           MAIN TITLE
+        ========================================= */
+
+        .title-box {
+
+            width: calc(100% - 290px);
+
+            height: 115px;
+
+            margin-top: 30px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #073f7a,
+                    #176eb8
+                );
+
+            border-radius: 24px;
+
+            display: flex;
+
+            align-items: center;
+
+            padding: 18px 28px;
+
+            position: relative;
+
+            z-index: 10;
+        }
+
+
+        .bus-circle {
+
+            width: 82px;
+            height: 82px;
+
+            border: 5px solid white;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+
+            font-size: 42px;
+
+            margin-right: 25px;
+        }
+
+
+        .title-box h1 {
+
+            color: white;
+
+            font-size: 48px;
+
+            font-weight: 900;
+
+            white-space: nowrap;
+        }
+
+
+        /* =========================================
+           SAFE SMART SUSTAINABLE
+        ========================================= */
+
+        .safe-text {
+
+            width: calc(100% - 290px);
+
+            text-align: center;
+
+            color: #125692;
+
+            font-size: 19px;
+
+            font-weight: bold;
+
+            letter-spacing: 5px;
+
+            margin-top: 14px;
+
+            margin-bottom: 20px;
+
+            position: relative;
+
+            z-index: 10;
+        }
+
+
+        /* =========================================
+           DETAILS
+        ========================================= */
+
+        .pass-details {
+
+            width: calc(100% - 290px);
+
+            position: relative;
+
+            z-index: 10;
+        }
+
+
+        .verified {
+
+            font-size: 20px;
+
+            color: #145da0;
+
+            margin-bottom: 20px;
+        }
+
+
+        .detail-row {
+
+            display: flex;
+
+            align-items: baseline;
+
+            margin-bottom: 14px;
+
+            font-size: 19px;
+
+            line-height: 1.35;
+        }
+
+
+        .label {
+
+            width: 180px;
+
+            flex-shrink: 0;
+
+            font-weight: 800;
+
+            color: #315b80;
+        }
+
+
+        .value {
+
+            color: #173b63;
+
+            font-weight: 500;
+        }
+
+
+        /* =========================================
+           BOTTOM DESIGN
+        ========================================= */
+
+        .bottom-wave {
+
+            position: absolute;
+
+            bottom: -115px;
+            left: -50px;
+
+            width: 120%;
+            height: 240px;
+
+            background:
+                linear-gradient(
+                    165deg,
+                    transparent 20%,
+                    #d9ecfb 21%,
+                    #d9ecfb 48%,
+                    #4b9bd5 49%,
+                    #176eb8 70%,
+                    #07559c 71%
+                );
+
+            transform: rotate(-3deg);
+
+            z-index: 1;
+        }
+
+
+        /* =========================================
+           BUS WATERMARK
+        ========================================= */
+
+        .bus-watermark {
+
+            position: absolute;
+
+            right: 300px;
+            bottom: 35px;
+
+            font-size: 100px;
+
+            opacity: 0.15;
+
+            z-index: 2;
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 900px) {
+
+            body {
+                padding: 10px;
+                align-items: flex-start;
+            }
+
+
+            .pass-card {
+
+                width: 100%;
+
+                min-height: auto;
+
+                padding: 25px;
+
+                border-radius: 20px;
+            }
+
+
+            .pass-header {
+
+                width: 100%;
+            }
+
+
+            .brand-name {
+                font-size: 55px;
+            }
+
+
+            .brand-subtitle {
+
+                font-size: 10px;
+
+                letter-spacing: 3px;
+            }
+
+
+            .tagline {
+                display: none;
+            }
+
+
+            .right-panel {
+
+                position: relative;
+
+                top: auto;
+                right: auto;
+
+                width: 100%;
+
+                display: flex;
+
+                gap: 15px;
+
+                margin-top: 25px;
+            }
+
+
+            .student-photo {
+
+                width: 50%;
+                height: 190px;
+            }
+
+
+            .qr-box {
+
+                width: 50%;
+                height: 190px;
+
+                margin-top: 0;
+            }
+
+
+            .title-box {
+
+                width: 100%;
+
+                margin-top: 25px;
+
+                height: 90px;
+
+                padding: 12px 18px;
+            }
+
+
+            .title-box h1 {
+
+                font-size: 30px;
+            }
+
+
+            .bus-circle {
+
+                width: 62px;
+                height: 62px;
+
+                font-size: 30px;
+
+                margin-right: 15px;
+            }
+
+
+            .safe-text {
+
+                width: 100%;
+
+                font-size: 13px;
+
+                letter-spacing: 3px;
+            }
+
+
+            .pass-details {
+
+                width: 100%;
+            }
+
+
+            .detail-row {
+
+                font-size: 16px;
+
+                margin-bottom: 12px;
+            }
+
+
+            .label {
+
+                width: 145px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<main class="page-shell">
+
+
+    <section class="pass-card">
+
+
+        <!-- =====================================
+             YOVAA HEADER
+        ====================================== -->
+
+        <header class="pass-header">
+
+            <div>
+
+                <div class="brand-name">
+                    YOVAA
+                </div>
+
+                <div class="brand-subtitle">
+                    PUBLIC BUS PASS PLATFORM
+                </div>
+
+            </div>
+
+
+            <div class="tagline">
+
+                Your Journey<br>
+                Our Priority
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =====================================
+             STUDENT PHOTO + QR
+        ====================================== -->
+
+        <div class="right-panel">
+
+
+            <!-- STUDENT PHOTO -->
+
+            <div class="student-photo">
+
+                {% if pass_obj.application.photo %}
+
+                    <img
+                        src="{{ pass_obj.application.photo.url }}"
+                        alt="Student Photo"
+                    >
+
+                {% else %}
+
+                    <img
+                        src="{% static 'images/student-placeholder.jpg' %}"
+                        alt="Student Photo"
+                    >
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- QR CODE -->
+
+            <div class="qr-box">
+
+                {% if pass_obj.qr_code %}
+
+                    <img
+                        src="{{ pass_obj.qr_code.url }}"
+                        alt="YOVAA QR Code"
+                    >
+
+                {% else %}
+
+                    <div class="qr-error">
+
+                        QR Code<br>
+                        Not Available
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =====================================
+             TITLE
+        ====================================== -->
+
+        <div class="title-box">
+
+            <div class="bus-circle">
+                🚌
+            </div>
+
+            <h1>
+                College Bus Pass
+            </h1>
+
+        </div>
+
+
+
+        <!-- =====================================
+             SUBTITLE
+        ====================================== -->
+
+        <div class="safe-text">
+
+            SAFE
+            &nbsp; • &nbsp;
+            SMART
+            &nbsp; • &nbsp;
+            SUSTAINABLE
+
+        </div>
+
+
+
+        <!-- =====================================
+             PASS DETAILS
+        ====================================== -->
+
+        <div class="pass-details">
+
+
+            <p class="verified">
+                Verified travel credential
+            </p>
+
+
+
+            <!-- PASS NUMBER -->
+
+            <div class="detail-row">
+
+                <span class="label">
+                    Pass Number:
+                </span>
+
+                <span class="value">
+                    {{ pass_obj.pass_number }}
+                </span>
+
+            </div>
+
+
+
+            <!-- APPLICATION NUMBER -->
+
+            <div class="detail-row">
+
+                <span class="label">
+                    Application No:
+                </span>
+
+                <span class="value">
+                    {{ pass_obj.application.application_number }}
+                </span>
+
+            </div>
+
+
+
+            <!-- NAME -->
+
+            <div class="detail-row">
+
+                <span class="label">
+                    Name:
+                </span>
+
+                <span class="value">
+                    {{ pass_obj.application.full_name }}
+                </span>
+
+            </div>
+
+
+
+            <!-- PASS TYPE -->
+
+            <div class="detail-row">
+
+                <span class="label">
+                    Pass Type:
+                </span>
+
+                <span class="value">
+                    {{ pass_obj.application.get_pass_type_display }}
+                </span>
+
+            </div>
+
+
+
+            <!-- DISABLED PASS -->
+
+            {% if pass_obj.application.pass_type == "DISABLED" %}
+
+
+                <div class="detail-row">
+
+                    <span class="label">
+                        Valid Area:
+                    </span>
+
+                    <span class="value">
+
+                        Valid only within
+                        {{ pass_obj.application.district|default:"the selected district" }}
+                        district
+
+                    </span>
+
+                </div>
+
+
+            {% else %}
+
+
+                <!-- ROUTE -->
+
+                <div class="detail-row">
+
+                    <span class="label">
+                        Route:
+                    </span>
+
+                    <span class="value">
+                        {{ pass_obj.application.route }}
+                    </span>
+
+                </div>
+
+
+
+                <!-- STARTING POINT -->
+
+                <div class="detail-row">
+
+                    <span class="label">
+                        From:
+                    </span>
+
+                    <span class="value">
+                        {{ pass_obj.application.start_point }}
+                    </span>
+
+                </div>
+
+
+
+                <!-- DESTINATION -->
+
+                <div class="detail-row">
+
+                    <span class="label">
+                        To:
+                    </span>
+
+                    <span class="value">
+                        {{ pass_obj.application.destination_point }}
+                    </span>
+
+                </div>
+
+
+            {% endif %}
+
+
+
+            <!-- VALID FROM -->
+
+            <div class="detail-row">
+
+                <span class="label">
+                    Valid From:
+                </span>
+
+                <span class="value">
+                    {{ pass_obj.valid_from|default:pass_obj.issue_date }}
+                </span>
+
+            </div>
+
+
+
+            <!-- E-PASS VALIDITY -->
+
+            <div class="detail-row">
+
+                <span class="label">
+                    E-Pass Valid Until:
+                </span>
+
+                <span class="value">
+                    {{ pass_obj.valid_until|default:pass_obj.expiry_date }}
+                </span>
+
+            </div>
+
+
+
+            <!-- QR VALIDITY -->
+
+            <div class="detail-row">
+
+                <span class="label">
+                    QR Valid Until:
+                </span>
+
+                <span class="value">
+                    {{ pass_obj.expiry_date }}
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =====================================
+             BOTTOM DESIGN
+        ====================================== -->
+
+        <div class="bus-watermark">
+            🚌
+        </div>
+
+
+        <div class="bottom-wave"></div>
+
+
+    </section>
+
+
+</main>
+
+
+</body>
+
+</html>
+    {% if pass_obj.qr_code %}
+        <img src="{{ pass_obj.qr_code.url }}" alt="YOVAA QR Code" width="220">
+    {% else %}
+        <p>QR code is not available for this legacy pass.</p>
+    {% endif %}
+
+    <hr>
+    <h3>Valid Digital Bus Pass</h3>
+
+</section></main></body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YOVAA - Dashboard</title>
+</head>
+<body>
+    <h1>YOVAA</h1>
+    <h2>Welcome, {{ request.user.first_name }}</h2>
+    <p>{{ profile.get_user_type_display }}</p>
+    <nav>
+        <a href="{% url 'home' %}">Back to Home</a> |
+        <a href="/users/">New Apply</a> |
+        <a href="/users/dashboard/">Process Tracking</a> |
+        <a href="/users/dashboard/">E-Pass</a> |
+        <a href="{% url 'account_logout' %}">Logout</a>
+    </nav>
+</body>
+</html>

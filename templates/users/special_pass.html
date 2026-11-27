@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - Special Pass</title>
+</head>
+<body>
+    <h1>YOVAA</h1>
+    <h2>Special Bus Pass</h2>
+    <p>For eligible government transport staff.</p>
+    <hr>
+
+    <form method="POST">
+        {% csrf_token %}
+        <label>Staff Number</label>
+        <input type="text" name="staff_number" required>
+
+        <br><br>
+
+        <button type="submit">
+            Verify Staff
+        </button>
+
+    </form>
+
+    {% if error %}
+        <hr>
+        <p>{{ error }}</p>
+    {% endif %}
+
+    {% if staff %}
+        <hr>
+        <h2>Staff Verification Successful</h2>
+        <p><strong>Staff Number:</strong> {{ staff.staff_number }}</p>
+        <p><strong>Name:</strong> {{ staff.name }}</p>
+        <p><strong>Designation:</strong> {{ staff.designation }}</p>
+        <p><strong>Department:</strong> {{ staff.department }}</p>
+        <p><strong>Workplace:</strong> {{ staff.workplace }}</p>
+        <p><strong>Status:</strong> {{ staff.employment_status }}</p>
+        <a href="{% url 'create_special_application' staff.id %}">Continue Application</a>
+    {% endif %}
+
+</body>
+</html>

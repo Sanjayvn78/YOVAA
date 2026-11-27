@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+	<title>YOVAA - Staff Login</title>
+	<style>
+		.special-login { min-height: 100vh; }
+		.special-login .topbar { margin-bottom: 70px; }
+		.special-login-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 34px; align-items: stretch; }
+		.special-intro { padding: 28px 0; }
+		.special-intro h1 { max-width: 620px; margin: 18px 0; }
+		.special-intro p { max-width: 560px; font-size: 1.1rem; }
+		.special-points { display: grid; gap: 12px; margin-top: 30px; max-width: 520px; }
+		.special-point { display: flex; gap: 12px; align-items: center; padding: 13px 16px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+		.special-point b { color: var(--teal-dark); }
+		.special-point span { display: grid; place-items: center; width: 28px; height: 28px; flex: 0 0 auto; border-radius: 50%; color: #fff; background: var(--coral); font-weight: 800; }
+		.special-login-card { align-self: center; padding: 30px; border: 1px solid var(--line); border-radius: 24px; background: #fff; box-shadow: var(--shadow); }
+		.special-login-card h2 { margin: 8px 0; }
+		.special-login-card form { padding: 0; border: 0; box-shadow: none; }
+		.special-login-card input { max-width: none; margin-bottom: 14px; }
+		.special-login-card button { width: 100%; margin-top: 10px; }
+		.special-error { padding: 11px 14px; border-radius: 10px; color: #9c3f2b; background: #fff0ec; font-weight: 700; }
+		@media (max-width: 760px) { .special-login .topbar { margin-bottom: 35px; } .special-login-grid { grid-template-columns: 1fr; } .special-intro { padding: 0; } }
+	</style>
+</head>
+<body class="special-login">
+<main class="shell">
+	<nav class="topbar">
+		<a class="brand" href="{% url 'home' %}"><span class="brand-mark">Y</span>YOVAA</a>
+		<a class="button secondary" href="{% url 'home' %}">&larr; Back to Home</a>
+	</nav>
+	<section class="special-login-grid">
+		<div class="special-intro">
+			<span class="eyebrow">Special bus pass</span>
+			<h1>One ID. One secure pass.</h1>
+			<p>Permanent transport staff can access their free all-bus pass using the Staff ID already verified in the department records.</p>
+			<div class="special-points">
+				<div class="special-point"><span>1</span><b>Enter your Staff ID</b></div>
+				<div class="special-point"><span>2</span><b>Review your verified details</b></div>
+				<div class="special-point"><span>3</span><b>Upload documents and generate your pass</b></div>
+			</div>
+		</div>
+		<section class="special-login-card">
+			<span class="eyebrow">Staff verification</span>
+			<h2>Welcome back</h2>
+			<p>Use your permanent Staff ID to continue.</p>
+			{% if error %}<p class="special-error">{{ error }}</p>{% endif %}
+			<form method="POST">
+				{% csrf_token %}
+				<label for="staff-id">Staff ID</label>
+				<input id="staff-id" name="identifier" placeholder="Example: GTS001" autocomplete="username" required>
+				<button type="submit">Continue to Dashboard</button>
+			</form>
+		</section>
+	</section>
+</main>
+</body>
+</html>

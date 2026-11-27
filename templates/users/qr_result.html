@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - Verification Result</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        .result { width: 400px; margin: auto; padding: 30px; border: 1px solid #ddd; border-radius: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="result">
+    <h1>YOVAA</h1>
+    <h2>Bus Pass Verification</h2>
+
+    {% if status == "VALID" %}
+        <h2>VALID PASS</h2>
+        <p><strong>Pass Number:</strong> {{ pass_obj.pass_number }}</p>
+        <p><strong>Name:</strong> {{ pass_obj.application.full_name }}</p>
+        <p><strong>Pass Type:</strong> {{ pass_obj.application.get_pass_type_display }}</p>
+        <p><strong>Valid Until:</strong> {{ pass_obj.expiry_date }}</p>
+        <p>Passenger is eligible for travel.</p>
+    {% elif status == "EXPIRED" %}
+        <h2>EXPIRED PASS</h2>
+        <p>Pass Number: {{ pass_obj.pass_number }}</p>
+        <p>This pass is no longer valid.</p>
+    {% else %}
+        <h2>INVALID PASS</h2>
+        <p>This QR code is not associated with a valid YOVAA pass.</p>
+    {% endif %}
+
+    <br>
+    <a href="/users/qr-scanner/">Scan Another Pass</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+    <title>YOVAA - College Admin</title>
+    <style>
+        .table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); }
+        .application-table { width: 100%; min-width: 900px; border-collapse: collapse; }
+        .application-table th, .application-table td { padding: 16px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+        .application-table th { color: var(--muted); background: #eef5f3; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
+        .application-table tr:last-child td { border-bottom: 0; }
+        .action-cell { white-space: nowrap; text-align: right !important; }
+        .action-cell form { display: inline; padding: 0; border: 0; box-shadow: none; background: transparent; }
+        .action-cell button { padding: 8px 12px; margin-left: 5px; font-size: .8rem; }
+        .reject { background: var(--coral); }
+    </style>
+</head>
+<body>
+<main class="shell">
+    <nav class="topbar">{% include "partials/yovaa_brand.html" %}<span class="eyebrow">College administration</span></nav>
+    <div class="toolbar"><div><span class="eyebrow">{{ admin_name }}</span><h1>{{ college_name }} Applications</h1><p>Review students from your college before forwarding them to Transport Admin.</p></div><span class="status">{{ applications|length }} pending</span></div>
+
+    {% if applications %}
+        <div class="table-wrap">
+            <table class="application-table">
+                <thead><tr><th>Application</th><th>Student</th><th>UMIS Number</th><th>College</th><th>Route</th><th>Status</th><th class="action-cell">Action</th></tr></thead>
+                <tbody>
+                {% for application in applications %}
+                    <tr>
+                        <td><a href="{% url 'college_application_review' application.id %}">{{ application.application_number }}</a></td>
+                        <td><strong>{{ application.full_name }}</strong></td>
+                        <td>{{ application.registration_number|default:application.verification_id }}</td>
+                        <td>{{ application.college_name|default:"-" }}</td>
+                        <td>{{ application.route }}<br><small>{{ application.start_point }} → {{ application.destination_point }}</small></td>
+                        <td><span class="status">{{ application.get_status_display }}</span></td>
+                        <td class="action-cell">
+                            <form method="POST" action="{% url 'college_verify_application' application.id %}">{% csrf_token %}<button type="submit" name="action" value="approve">Approve</button><button class="reject" type="submit" name="action" value="reject">Reject</button></form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <section class="card"><h2>No pending college applications</h2><p>New UMIS-verified applications will appear here.</p></section>
+    {% endif %}
+    <p><a href="{% url 'admin_logout' %}">Logout</a></p>
+</main>
+</body>
+</html>

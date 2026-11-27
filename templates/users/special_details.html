@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+    <title>YOVAA - Special Pass</title>
+</head>
+<body>
+<main class="page-shell"><header class="page-header">
+    {% include "partials/yovaa_brand.html" %}
+    <span class="eyebrow">Special pass registration</span>
+</header>
+<section class="card form-card">
+    <h1>Register Your Special Pass</h1>
+    <p>Verified staff can travel free on any bus. No route or stop selection is required.</p>
+    <div class="detail-grid">
+        <div class="detail-item"><small>Staff ID</small><strong>{{ staff.staff_number }}</strong></div>
+        <div class="detail-item"><small>Name</small><strong>{{ staff.name }}</strong></div>
+        <div class="detail-item"><small>Workplace</small><strong>{{ staff.workplace }}</strong></div>
+    </div>
+    <hr>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="staff_id" value="{{ staff.id }}">
+        <input type="hidden" name="submit_application" value="1">
+        <button type="submit">Submit Free Special Pass Registration</button>
+    </form>
+</section></main>
+</body>
+</html>

@@ -1,0 +1,462 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOVAA - Admin Control Center</title>
+    <style>
+        :root {
+            --header-bg: #0b6d6d;
+            --header-dark: #055a5d;
+            --page-bg: #f4f5f4;
+            --panel-bg: #f8f9f8;
+            --card-bg: #f5f7f6;
+            --card-border: #dfe8e5;
+            --text: #1a2b2e;
+            --muted: #66787d;
+            --muted-soft: #90a0a5;
+            --teal: #0a7374;
+            --teal-soft: #dff0ed;
+            --light-green: #e3f1ee;
+            --shadow: rgba(17, 32, 38, 0.07);
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            background: var(--page-bg);
+            color: var(--text);
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, var(--header-bg), var(--header-dark));
+            color: #fff;
+            padding: 0 28px;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+        }
+
+        .admin-header-inner {
+            max-width: 1460px;
+            height: 72px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.05rem;
+            letter-spacing: 0.04em;
+        }
+
+        .brand-mark {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.14);
+            border: 1px solid rgba(255,255,255,0.28);
+            position: relative;
+            display: inline-block;
+        }
+
+        .brand-mark::before {
+            content: "";
+            position: absolute;
+            inset: 4px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 3px;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            transform: skewY(-10deg);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-button {
+            padding: 10px 20px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #fff;
+            transition: transform 0.18s ease, opacity 0.18s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-button:hover {
+            transform: translateY(-1px);
+            opacity: 0.96;
+        }
+
+        .header-button.active {
+            background: rgba(255,255,255,0.92);
+            color: var(--header-bg);
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04);
+        }
+
+        .header-button.secondary {
+            background: transparent;
+            color: #fff;
+        }
+
+        .admin-main {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 52px 28px 80px;
+        }
+
+        .overview-row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 26px;
+        }
+
+        .eyebrow {
+            margin: 0 0 10px;
+            color: var(--teal);
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .main-title {
+            margin: 0;
+            font-size: clamp(3.2rem, 4.2vw, 6rem);
+            line-height: 0.9;
+            letter-spacing: -0.065em;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .main-title .dot {
+            width: 14px;
+            height: 14px;
+            display: inline-block;
+            border-radius: 50%;
+            background: var(--text);
+            transform: translateY(-18px);
+            margin-left: 6px;
+            box-shadow: 0 0 0 4px rgba(26,43,58,0.04);
+        }
+
+        .overview-copy {
+            max-width: 500px;
+            margin: 18px 0 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+            line-height: 1.5;
+        }
+
+        .module-chip {
+            margin: 0;
+            color: var(--teal);
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(220px, 1fr));
+            gap: 18px;
+            margin: 18px 0 28px;
+        }
+
+        .metric-card {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 20px 24px 18px;
+            box-shadow: 0 8px 18px var(--shadow);
+            min-height: 120px;
+        }
+
+        .metric-label {
+            display: block;
+            color: var(--muted);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .metric-value {
+            display: block;
+            font-size: clamp(2.2rem, 2.8vw, 3.2rem);
+            line-height: 1;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .module-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 240px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid var(--card-border);
+            border-radius: 18px;
+            padding: 18px 18px 20px;
+            text-decoration: none;
+            color: var(--text);
+            box-shadow: 0 10px 22px var(--shadow);
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        }
+
+        .module-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(10, 115, 116, 0.4);
+            box-shadow: 0 18px 28px rgba(17, 32, 38, 0.09);
+        }
+
+        .module-card::after {
+            content: "→";
+            position: absolute;
+            right: 18px;
+            bottom: 16px;
+            font-size: 1.5rem;
+            color: var(--teal);
+            opacity: 0.7;
+            transition: transform 0.2s ease;
+        }
+
+        .module-card:hover::after {
+            transform: translateX(4px);
+        }
+
+        .module-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .module-number {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--text);
+            opacity: 0.85;
+        }
+
+        .module-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: var(--light-green);
+            display: grid;
+            place-items: center;
+            font-size: 1.8rem;
+            box-shadow: inset 0 0 0 1px rgba(10, 115, 116, 0.08);
+        }
+
+        .module-title {
+            margin: 0 0 8px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1.3;
+        }
+
+        .module-copy {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.55;
+            max-width: 180px;
+        }
+
+        .module-link {
+            margin-top: 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--teal);
+            font-size: 0.9rem;
+            font-weight: 800;
+            text-decoration: none;
+            width: fit-content;
+        }
+
+        @media (max-width: 1100px) {
+            .module-grid {
+                grid-template-columns: repeat(3, minmax(180px, 1fr));
+            }
+        }
+
+        @media (max-width: 760px) {
+            .admin-header {
+                padding: 0 18px;
+            }
+
+            .admin-header-inner {
+                height: 68px;
+            }
+
+            .brand {
+                font-size: 0.95rem;
+            }
+
+            .header-button {
+                padding: 9px 14px;
+                font-size: 0.8rem;
+            }
+
+            .admin-main {
+                padding: 28px 18px 50px;
+            }
+
+            .overview-row {
+                display: block;
+            }
+
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .module-grid {
+                grid-template-columns: repeat(2, minmax(170px, 1fr));
+            }
+        }
+
+        @media (max-width: 420px) {
+            .module-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="admin-header-inner">
+            <div class="brand">
+                <span class="brand-mark" aria-hidden="true"></span>
+                <span>YOVAA Transport Administration</span>
+            </div>
+
+            <nav class="header-actions" aria-label="Main navigation">
+                <a href="{% url 'admins_home' %}" class="header-button active">Home</a>
+                <a href="{% url 'transport_admin' %}" class="header-button secondary">Dashboard</a>
+                <a href="{% url 'admin_logout' %}" class="header-button secondary">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <div class="overview-row">
+            <div>
+                <p class="eyebrow">Operations overview</p>
+                <h1 class="main-title">Application Modules<span class="dot" aria-hidden="true"></span></h1>
+                <p class="overview-copy">Monitor every pass category, open a sector workspace, and keep verification moving.</p>
+            </div>
+            <p class="module-chip">Transport operations</p>
+        </div>
+
+        <section class="metrics" aria-label="Application metrics">
+            <article class="metric-card">
+                <span class="metric-label">Total applications</span>
+                <span class="metric-value">0</span>
+            </article>
+            <article class="metric-card">
+                <span class="metric-label">Awaiting action</span>
+                <span class="metric-value">0</span>
+            </article>
+            <article class="metric-card">
+                <span class="metric-label">E-passes generated</span>
+                <span class="metric-value">0</span>
+            </article>
+        </section>
+
+        <section class="module-grid" aria-label="Admin modules">
+            <a class="module-card" href="{% url 'transport_school_portal' %}">
+                <div>
+                    <div class="module-top">
+                        <span class="module-number">01</span>
+                        <span class="module-icon" aria-hidden="true">🏫</span>
+                    </div>
+                    <h2 class="module-title">School Students</h2>
+                    <p class="module-copy">0 school pass applications.</p>
+                </div>
+                <span class="module-link">Open module</span>
+            </a>
+
+            <a class="module-card" href="{% url 'transport_college_portal' %}">
+                <div>
+                    <div class="module-top">
+                        <span class="module-number">02</span>
+                        <span class="module-icon" aria-hidden="true">🎓</span>
+                    </div>
+                    <h2 class="module-title">College Students</h2>
+                    <p class="module-copy">0 college pass applications.</p>
+                </div>
+                <span class="module-link">Open module</span>
+            </a>
+
+            <a class="module-card" href="{% url 'transport_disabled_portal' %}">
+                <div>
+                    <div class="module-top">
+                        <span class="module-number">03</span>
+                        <span class="module-icon" aria-hidden="true">♿</span>
+                    </div>
+                    <h2 class="module-title">Disabled Person</h2>
+                    <p class="module-copy">0 verified disability applications.</p>
+                </div>
+                <span class="module-link">Open module</span>
+            </a>
+
+            <a class="module-card" href="{% url 'transport_general_portal' %}">
+                <div>
+                    <div class="module-top">
+                        <span class="module-number">04</span>
+                        <span class="module-icon" aria-hidden="true">👤</span>
+                    </div>
+                    <h2 class="module-title">General Public</h2>
+                    <p class="module-copy">0 payments awaiting verification.</p>
+                </div>
+                <span class="module-link">Open module</span>
+            </a>
+
+            <a class="module-card" href="{% url 'transport_special_portal' %}">
+                <div>
+                    <div class="module-top">
+                        <span class="module-number">05</span>
+                        <span class="module-icon" aria-hidden="true">🚌</span>
+                    </div>
+                    <h2 class="module-title">Special Person</h2>
+                    <p class="module-copy">0 eligible staff applications.</p>
+                </div>
+                <span class="module-link">Open module</span>
+            </a>
+        </section>
+    </main>
+</body>
+</html>

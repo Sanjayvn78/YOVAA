@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YOVAA - Verification Tracking</title>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+</head>
+<body class="tracking-page">
+<header class="dashboard-header">
+    <div class="dashboard-header-inner">
+        {% include "partials/yovaa_brand.html" %}
+        <div class="dashboard-header-title">
+            <h1>College Bus Pass Verification</h1>
+            <p>Follow your application from submission to digital pass.</p>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;"><a class="button secondary" href="{% url 'college_dashboard' %}">Back to Dashboard</a><a class="button" href="{% url 'account_logout' %}">Logout</a></div>
+    </div>
+</header>
+<main class="tracking-main">
+    {% if selected_application %}
+        <div class="tracking-heading"><h2>Application Tracking</h2><p>Current verification progress for this application.</p></div>
+        <section class="tracking-detail">
+            <div class="tracking-detail-top">
+                <div><h2>{{ selected_application.application_number }}</h2><p>{{ selected_application.start_point }} to {{ selected_application.destination_point }} · Applied {{ selected_application.created_at|date:"d M Y, h:i A" }}</p></div>
+                <span class="status">{{ selected_application.get_status_display }}</span>
+            </div>
+            <div class="verification-track">
+                <div class="track-step completed"><strong>Application Submitted</strong><small>Your application was received</small></div>
+                <div class="track-step {% if selected_application.status == 'TRANSPORT_VERIFICATION' %}current{% elif selected_application.status == 'COLLEGE_VERIFICATION' or selected_application.status == 'COLLEGE_APPROVED' or selected_application.status == 'PAYMENT_PENDING' or selected_application.status == 'PAYMENT_COMPLETED' %}completed{% endif %}"><strong>Transport Verification</strong><small>{% if selected_application.status == 'TRANSPORT_VERIFICATION' %}In progress{% else %}Checking application details{% endif %}</small></div>
+                <div class="track-step {% if selected_application.status == 'COLLEGE_VERIFICATION' %}current{% elif selected_application.status == 'COLLEGE_APPROVED' or selected_application.status == 'PAYMENT_PENDING' or selected_application.status == 'PAYMENT_COMPLETED' %}completed{% endif %}"><strong>College Verification</strong><small>{% if selected_application.status == 'COLLEGE_VERIFICATION' %}In progress{% else %}College approval stage{% endif %}</small></div>
+                <div class="track-step {% if selected_application.status == 'PAYMENT_PENDING' %}current{% elif selected_application.status == 'PAYMENT_COMPLETED' %}completed{% endif %}"><strong>Payment</strong><small>{% if selected_application.status == 'PAYMENT_PENDING' %}Payment pending{% elif selected_application.status == 'PAYMENT_COMPLETED' %}Payment completed{% else %}Waiting for approval{% endif %}</small></div>
+                <div class="track-step {% if selected_application.status == 'PAYMENT_COMPLETED' %}completed{% endif %}"><strong>E-Pass</strong><small>{% if selected_application.status == 'PAYMENT_COMPLETED' %}E-Pass available{% else %}Will be available after payment{% endif %}</small></div>
+            </div>
+            <div class="action-row"><a class="button secondary" href="{% url 'college_tracking' %}">Back to My Applications</a>{% if selected_application.status == 'PAYMENT_PENDING' %}<a class="button" href="/users/payment/{{ selected_application.id }}/">Pay Now</a>{% elif selected_application.status == 'PAYMENT_COMPLETED' %}<a class="button" href="/users/epass/{{ selected_application.id }}/">View E-Pass</a><a class="button secondary" href="/users/epass/{{ selected_application.id }}/download/">Download Your ePass</a>{% endif %}</div>
+        </section>
+    {% else %}
+        <div class="tracking-heading"><h2>My College Applications</h2><p>Select an application to view its verification timeline.</p></div>
+        <section class="tracking-list">
+            {% for application in applications %}
+                <article class="tracking-list-item">
+                    <div><strong>{{ application.application_number }}</strong><small>{{ application.start_point }} to {{ application.destination_point }} · Applied {{ application.created_at|date:"d M Y" }}</small></div>
+                    <span class="status">{{ application.get_status_display }}</span>
+                    <div class="action-row"><a class="button secondary" href="{% url 'college_application_tracking' application.id %}">View Tracking</a></div>
+                </article>
+            {% empty %}
+                <p>No college applications found. Start a new application from the dashboard.</p>
+            {% endfor %}
+        </section>
+    {% endif %}
+</main>
+</body>
+</html>

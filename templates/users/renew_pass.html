@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - Renew Pass</title>
+</head>
+<body><main class="page-shell"><header class="page-header">{% include "partials/yovaa_brand.html" %}<span class="eyebrow">Pass renewal</span></header><section class="card form-card">
+    <h1>Renew Bus Pass</h1>
+    <p>Your existing pass details will be reused. No additional details are required.</p>
+    <div class="detail-grid">
+        <div class="detail-item"><small>Pass Number</small><strong>{{ old_application.epass.pass_number }}</strong></div>
+        <div class="detail-item"><small>Pass Type</small><strong>{{ old_application.get_pass_type_display }}</strong></div>
+        <div class="detail-item"><small>Route</small><strong>{{ old_application.route }}</strong></div>
+        <div class="detail-item"><small>Valid Until</small><strong>{{ old_application.epass.expiry_date }}</strong></div>
+    </div>
+    <p class="verification-state">Your existing verified details will be carried into the renewal application.</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Renew Pass and Continue to Payment</button>
+    </form></section></main></body>
+</html>

@@ -1,0 +1,13 @@
+{% load static %}
+<!DOCTYPE html>
+<html><head><link rel="stylesheet" href="{% static 'css/yovaa.css' %}"><title>YOVAA - College Registration</title></head><body><main class="shell">
+<header class="page-header">{% include "partials/yovaa_brand.html" %}<span class="eyebrow">College access</span></header><section class="card form-card"><h1>College Student Registration</h1><p>Connect your account with your verified UMIS student record.</p>{% if error %}<p class="error">{{ error }}</p>{% endif %}
+<form method="POST">{% csrf_token %}<input type="hidden" name="next" value="{{ next }}">
+<label>UMIS / Registration Number</label><br><input name="identifier" required><br><br>
+<label>Student Name</label><br><input name="name" required><br><br>
+<label>College Email ID</label><br><input type="email" name="email" required><br><br>
+<label>New Password</label><br><input type="password" name="password" required><br><br>
+<label>Confirm Password</label><br><input type="password" name="confirm_password" required><br><br>
+<button type="submit">Register</button></form>
+<p><a href="{% url 'college_login' %}{% if next %}?next={{ next|urlencode }}{% endif %}">Already registered? Login</a></p>
+</section></main></body></html>

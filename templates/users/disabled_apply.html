@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - Disabled Person Pass</title>
+</head>
+<body><main class="page-shell"><header class="page-header">{% include "partials/yovaa_brand.html" %}<span class="eyebrow">Disability verification</span></header><section class="card form-card">
+    <h1>Disabled Person Bus Pass</h1>
+    <p>Enter your Disability ID to verify your details through the official dataset.</p>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <label>Disability ID</label><br>
+        <input type="text" name="disability_id" required>
+        <br><br>
+        <button type="submit">Verify</button>
+    </form></section></main></body>
+</html>

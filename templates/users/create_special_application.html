@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - Special Pass</title>
+</head>
+<body>
+    <h1>Special Bus Pass</h1>
+    <h2>Verified Transport Staff</h2>
+    <p><strong>Staff Number:</strong> {{ staff.staff_number }}</p>
+    <p><strong>Name:</strong> {{ staff.name }}</p>
+    <p><strong>Designation:</strong> {{ staff.designation }}</p>
+    <p><strong>Workplace:</strong> {{ staff.workplace }}</p>
+    <hr>
+
+    <h3>Travel Details</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="route">Route</label><br>
+        <input id="route" type="text" name="route" required>
+        <br><br>
+        <label for="start_point">Starting Point</label><br>
+        <input id="start_point" type="text" name="start_point" required>
+        <br><br>
+        <label for="destination_point">Destination Point</label><br>
+        <input id="destination_point" type="text" name="destination_point" required>
+        <br><br>
+        <button type="submit">Submit Application</button>
+    </form>
+</body>
+</html>

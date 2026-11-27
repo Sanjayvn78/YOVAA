@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - School Admin</title>
+</head>
+<body>
+
+    <h1>YOVAA</h1>
+    <h2>School Admin</h2>
+    <p>Create school bus pass applications using EMIS student verification.</p>
+
+    <hr>
+
+    <form method="POST">
+        {% csrf_token %}
+        <label>Enter EMIS Student ID</label><br>
+        <input type="text" name="student_id" required>
+        <br><br>
+        <button type="submit">Verify Student</button>
+    </form>
+
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+
+    {% if student %}
+        <hr>
+        <h2>EMIS Verification Successful</h2>
+        <p><strong>Student ID:</strong> {{ student.student_id }}</p>
+        <p><strong>Name:</strong> {{ student.student_name }}</p>
+        <p><strong>School:</strong> {{ student.school_name }}</p>
+        <p><strong>Class:</strong> {{ student.class_name }}</p>
+        <p><strong>Academic Year:</strong> {{ student.academic_year }}</p>
+
+        <a href="/users/admin/school/create-pass/{{ student.id }}/">
+            Create School Bus Pass
+        </a>
+    {% endif %}
+
+</body>
+</html>

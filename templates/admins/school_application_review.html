@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - School Application Review</title>
+</head>
+<body>
+
+    <h1>School Pass Application Review</h1>
+
+    <h2>Student Details</h2>
+
+    <p>
+        <strong>Application No:</strong>
+        {{ application.application_number }}
+    </p>
+
+    <p>
+        <strong>Student Name:</strong>
+        {{ application.full_name }}
+    </p>
+
+    <p>
+        <strong>EMIS Student ID:</strong>
+        {{ application.verification_id }}
+    </p>
+
+    <p>
+        <strong>Date of Birth:</strong>
+        {{ application.date_of_birth }}
+    </p>
+
+    <hr>
+
+    <h2>Travel Details</h2>
+
+    <p>
+        <strong>Route:</strong>
+        {{ application.route }}
+    </p>
+
+    <p>
+        <strong>Start Point:</strong>
+        {{ application.start_point }}
+    </p>
+
+    <p>
+        <strong>Destination:</strong>
+        {{ application.destination_point }}
+    </p>
+
+    <hr>
+
+    <h2>School Admin Decision</h2>
+
+    <form method="POST" action="/admins/school/application/{{ application.id }}/verify/">
+        {% csrf_token %}
+
+        <label>Remarks</label><br>
+        <textarea name="remarks" rows="4" cols="50" placeholder="Enter verification remarks..."></textarea>
+
+        <br><br>
+
+        <button type="submit" name="action" value="approve">
+            APPROVE
+        </button>
+
+        <button type="submit" name="action" value="reject">
+            REJECT
+        </button>
+    </form>
+
+</body>
+</html>

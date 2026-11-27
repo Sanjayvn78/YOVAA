@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 150" role="img" aria-labelledby="title desc">
+  <title id="title">YOVAA Transit</title>
+  <desc id="desc">YOVAA transport and logistics logo with a route line and moving bus</desc>
+  <rect width="520" height="150" rx="28" fill="#075b58"/>
+  <path d="M28 112h464" stroke="#f2c14e" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 18"/>
+  <path d="M70 87c42-38 75-38 112 0s75 38 112 0 75-38 112 0" fill="none" stroke="#e76f51" stroke-width="6" stroke-linecap="round"/>
+  <g transform="translate(306 48)">
+    <rect x="0" y="0" width="105" height="51" rx="11" fill="#f6f8f7"/>
+    <rect x="12" y="10" width="30" height="18" rx="4" fill="#087f78"/>
+    <rect x="48" y="10" width="43" height="18" rx="4" fill="#087f78"/>
+    <circle cx="23" cy="55" r="9" fill="#17212b"/>
+    <circle cx="82" cy="55" r="9" fill="#17212b"/>
+  </g>
+  <text x="31" y="62" fill="#fff" font-family="Space Grotesk,Arial,sans-serif" font-size="42" font-weight="700" letter-spacing="3">YOVAA</text>
+  <text x="34" y="91" fill="#bde7df" font-family="DM Sans,Arial,sans-serif" font-size="13" font-weight="700" letter-spacing="4">TRANSIT NETWORK</text>
+</svg>

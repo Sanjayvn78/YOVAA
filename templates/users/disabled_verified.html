@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOVAA - Verified Disability Pass</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #edf4fa 0%, #e4edf8 100%);
+            padding: 30px;
+        }
+
+        .bus-pass {
+            width: 1000px;
+            max-width: 100%;
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+            border: 1px solid #d5e0ec;
+        }
+
+        .header {
+            min-height: 145px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 25px 35px;
+            border-bottom: 1px solid #d9e3ed;
+            background: linear-gradient(180deg, #f9fbff 0%, #edf5ff 100%);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .logo {
+            font-size: 65px;
+            font-weight: 900;
+            color: #123f73;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: #1976d2;
+        }
+
+        .tagline {
+            font-size: 15px;
+            color: #234d78;
+            margin-top: -5px;
+        }
+
+        .divider {
+            width: 2px;
+            height: 75px;
+            background: #18548b;
+        }
+
+        .title-section h1 {
+            font-size: 30px;
+            color: #163e68;
+            letter-spacing: 1px;
+        }
+
+        .title-section h2 {
+            margin-top: 8px;
+            font-size: 21px;
+            font-weight: 500;
+            color: #285b8c;
+        }
+
+        .bus-icon {
+            font-size: 70px;
+        }
+
+        .bus-text {
+            text-align: center;
+            color: #163e68;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            padding: 35px;
+        }
+
+        .details {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .detail-row {
+            display: grid;
+            grid-template-columns: 190px 25px 1fr;
+            align-items: center;
+            font-size: 19px;
+        }
+
+        .label {
+            color: #174a7c;
+            font-weight: 700;
+        }
+
+        .colon {
+            color: #163e68;
+            font-weight: bold;
+        }
+
+        .value {
+            color: #101d35;
+            font-weight: 700;
+        }
+
+        .right-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .student-photo {
+            width: 170px;
+            height: 190px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid #1b5c98;
+            background: #e9eef4;
+        }
+
+        .qr-box {
+            width: 170px;
+            height: 170px;
+            border: 2px solid #1870bd;
+            border-radius: 12px;
+            padding: 10px;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .qr-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .scan-text {
+            font-size: 17px;
+            font-weight: 700;
+            color: #142f54;
+        }
+
+        .pass-info {
+            width: 100%;
+            display: flex;
+            background: #e2eefb;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 5px;
+            border: 1px solid #cfe0f3;
+        }
+
+        .pass-type,
+        .validity {
+            width: 50%;
+            padding: 18px;
+        }
+
+        .pass-type {
+            border-right: 2px solid #2874b8;
+        }
+
+        .pass-info small {
+            display: block;
+            font-size: 15px;
+            color: #234d78;
+            margin-bottom: 8px;
+        }
+
+        .pass-info strong {
+            font-size: 18px;
+            color: #102847;
+        }
+
+        .verification-note {
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            color: #2e6f3d;
+            background: #ebf9ef;
+            border: 1px solid #cde9d4;
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: inline-block;
+        }
+
+        .cta-row {
+            margin-top: 10px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            appearance: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #145ea7 0%, #0e4988 100%);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 22px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 10px 20px rgba(20, 94, 167, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn.secondary {
+            background: #edf5ff;
+            color: #123f73;
+            border: 1px solid #bdd5ef;
+            box-shadow: none;
+        }
+
+        .footer {
+            min-height: 115px;
+            background: #123f73;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 35px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer-logo .circle {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: white;
+            color: #123f73;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 25px;
+        }
+
+        .footer-logo h2 {
+            font-size: 28px;
+        }
+
+        .footer-logo p {
+            font-size: 15px;
+            margin-top: 3px;
+        }
+
+        .footer-divider {
+            width: 2px;
+            height: 60px;
+            background: rgba(255,255,255,0.6);
+        }
+
+        .footer-message {
+            font-size: 22px;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        .footer-bus {
+            font-size: 55px;
+        }
+
+        @media (max-width: 850px) {
+            body {
+                padding: 15px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .logo-section {
+                flex-direction: column;
+            }
+
+            .divider {
+                display: none;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .right-section {
+                order: -1;
+            }
+
+            .detail-row {
+                grid-template-columns: 130px 20px 1fr;
+                font-size: 15px;
+            }
+
+            .footer {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .footer-divider {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bus-pass">
+        <div class="header">
+            <div class="logo-section">
+                <div>
+                    <div class="logo">Y<span>O</span>VAA</div>
+                    <div class="tagline">Your Journey &nbsp; Our Support</div>
+                </div>
+                <div class="divider"></div>
+                <div class="title-section">
+                    <h1>UNIFIED BUS PASS SYSTEM</h1>
+                    <h2>DISABILITY VERIFICATION</h2>
+                </div>
+            </div>
+            <div>
+                <div class="bus-icon">🚌</div>
+                <div class="bus-text">Safe Ride &nbsp; Bright Future</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="details">
+                <div class="detail-row">
+                    <div class="label">👤 Name</div>
+                    <div class="colon">:</div>
+                    <div class="value">{{ person.name }}</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="label">🪪 Disability ID</div>
+                    <div class="colon">:</div>
+                    <div class="value">{{ person.disability_id }}</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="label">📅 Date of Birth</div>
+                    <div class="colon">:</div>
+                    <div class="value">{{ person.date_of_birth }}</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="label">♿ Disability Type</div>
+                    <div class="colon">:</div>
+                    <div class="value">{{ person.disability_type }}</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="label">📊 Percentage</div>
+                    <div class="colon">:</div>
+                    <div class="value">{{ person.disability_percentage|default:"-" }}%</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="label">📍 District</div>
+                    <div class="colon">:</div>
+                    <div class="value">{{ person.district|default:"-" }}</div>
+                </div>
+
+                <div class="verification-note">Verified from Disabled Person Dataset</div>
+
+                <div class="cta-row">
+                    <form method="POST" action="/users/apply/disabled/details/" style="margin:0;">
+                        {% csrf_token %}
+                        <input type="hidden" name="person_id" value="{{ person.id }}">
+                        <button class="btn" type="submit">Continue Application</button>
+                    </form>
+                    <a class="btn secondary" href="/users/apply/disabled/">Back</a>
+                </div>
+            </div>
+
+            <div class="right-section">
+                {% if person.photo %}
+                    <img src="{{ person.photo.url }}" class="student-photo" alt="Student Photo">
+                {% else %}
+                    <div class="student-photo" style="display:flex;align-items:center;justify-content:center;background:#e9eef4;color:#234d78;font-weight:700;">PHOTO</div>
+                {% endif %}
+
+                <div class="qr-box">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=170x170&data=YOVAA-{{ person.disability_id }}" alt="QR Code">
+                </div>
+
+                <div class="scan-text">Scan to Verify</div>
+
+                <div class="pass-info">
+                    <div class="pass-type">
+                        <small>Pass Type</small>
+                        <strong>Disabled Person</strong>
+                    </div>
+                    <div class="validity">
+                        <small>Verification Status</small>
+                        <strong>Approved</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-logo">
+                <div class="circle">🚌</div>
+                <div>
+                    <h2>YOVAA</h2>
+                    <p>Bus Pass</p>
+                </div>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-message">Travel Smart<br>Save Time</div>
+            <div class="footer-bus">🚌</div>
+        </div>
+    </div>
+</body>
+</html>
+

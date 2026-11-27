@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - College Pass Application</title>
+</head>
+<body>
+
+    <h1>College Bus Pass Application</h1>
+
+    <h2>UMIS Verified Student</h2>
+
+    <p>
+        <strong>Register Number:</strong>
+        {{ student.registration_number }}
+    </p>
+
+    <p>
+        <strong>Name:</strong>
+        {{ student.name }}
+    </p>
+
+    <p>
+        <strong>College:</strong>
+        {{ student.college_name }}
+    </p>
+
+    <p>
+        <strong>Department:</strong>
+        {{ student.department }}
+    </p>
+
+    <hr>
+
+    <h2>Travel Details</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {% include "users/route_fields.html" %}
+
+        <button type="submit">
+            Submit Application
+        </button>
+    </form>
+
+</body>
+</html>

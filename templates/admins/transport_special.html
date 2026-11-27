@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YOVAA - Special Passes</title>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+    <style>
+        .special-applicant-row {
+            display: grid;
+            grid-template-columns: minmax(180px, 1.2fr) minmax(190px, 1.2fr) minmax(130px, .8fr) minmax(130px, .7fr) auto;
+            align-items: center;
+            gap: 22px;
+            padding: 22px 0;
+            border-top: 1px solid var(--line);
+        }
+        .special-applicant-row small,
+        .special-applicant-row strong { display: block; }
+        .special-applicant-row small { margin-bottom: 5px; color: var(--muted); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; }
+        .special-applicant-row strong { color: var(--ink); }
+        .special-applicant-row .status { justify-self: start; }
+        .special-applicant-action { justify-self: end; }
+        @media (max-width: 760px) {
+            .special-applicant-row { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+            .special-applicant-action { justify-self: start; }
+        }
+    </style>
+</head>
+<body class="home-page">
+<main class="shell">
+    <header class="topbar"><a class="brand" href="{% url 'transport_admin' %}"><img class="brand-logo" src="{% static 'images/yovaa-transit-logo.svg' %}" alt="YOVAA"><span>YOVAA Transport</span></a><div><a class="button secondary" href="{% url 'transport_admin' %}">Dashboard</a> <a class="button" href="{% url 'admin_logout' %}">Logout</a></div></header>
+    <section class="hero-copy"><span class="eyebrow">Transport operations</span><h1>Special Pass Applications</h1><p>Review eligible transport staff applications and track e-pass generation.</p></section>
+    <section class="dashboard-stats" style="margin-top: 28px;"><article class="dashboard-stat"><small>Total applications</small><strong>{{ applications|length }}</strong></article><article class="dashboard-stat"><small>Awaiting review</small><strong>{{ pending_count }}</strong></article><article class="dashboard-stat"><small>E-Passes</small><strong>{{ epass_count }}</strong></article></section>
+    <section class="dashboard-section" style="margin-top: 24px;"><div class="dashboard-section-header"><h2>Applicants</h2><p>List of staff members who applied for a special pass.</p></div>{% if applications %}{% for application in applications %}<article class="special-applicant-row"><div><small>Applicant</small><strong>{{ application.full_name }}</strong></div><div><small>Application Number</small><strong>{{ application.application_number }}</strong></div><div><small>Staff ID</small><strong>{{ application.staff_number }}</strong></div><div><small>Status</small><span class="status">{{ application.get_status_display }}</span></div>{% if application.status == 'SPECIAL_VERIFICATION' %}<form class="special-applicant-action" method="POST" action="{% url 'transport_verify_special_application' application.id %}">{% csrf_token %}<button type="submit">Verify and Generate</button></form>{% endif %}</article>{% endfor %}{% else %}<p>No special applicants found.</p>{% endif %}</section>
+</main>
+</body>
+</html>

@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YOVAA - General Public</title>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+    <style>
+        .general-portal { min-height: 100vh; background: #f4f7fb; }
+        .general-shell { display: flex; min-height: 100vh; }
+        .general-sidebar { width: 270px; flex: 0 0 270px; padding: 22px 18px; color: #eaf1ff; background: #0e1c2d; }
+        .general-brand { display: flex; align-items: center; gap: 12px; margin: 8px 8px 28px; color: #fff; font-size: 1.7rem; font-weight: 800; }
+        .general-brand img { width: 34px; height: 34px; object-fit: contain; }
+        .general-menu { display: grid; gap: 8px; }
+        .general-menu a { display: block; padding: 12px 14px; border-radius: 10px; color: #dfeafc; text-decoration: none; font-weight: 600; }
+        .general-menu a.active { color: #fff; background: #2e6ae6; }
+        .general-profile { margin-top: 36px; padding: 14px 12px; border-radius: 12px; background: rgba(255,255,255,.04); color: #fff; }
+        .general-profile small { display: block; margin-top: 4px; color: #a3b3c8; }
+        .general-content { flex: 1; min-width: 0; }
+        .general-header { padding: 18px max(24px, 5vw); color: #fff; background: linear-gradient(110deg, #075b58, #087f78); }
+        .general-header-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; max-width: 1280px; margin: 0 auto; }
+        .general-header .brand { color: #fff; }
+        .general-main { width: min(1280px, calc(100% - 32px)); margin: 0 auto; padding: 42px 0 70px; }
+        .general-heading { display: flex; align-items: end; justify-content: space-between; gap: 18px; margin-bottom: 24px; }
+        .general-heading h1 { margin: 0; font-size: clamp(2rem, 4vw, 3.2rem); }
+        .general-heading p { margin: 8px 0 0; }
+        .general-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 22px; }
+        .general-stat, .general-panel { padding: 22px; border: 1px solid var(--line); border-radius: 18px; background: #fff; box-shadow: 0 10px 26px rgba(23,33,43,.05); }
+        .general-stat small { color: var(--muted); font-weight: 700; }
+        .general-stat strong { display: block; margin-top: 6px; color: var(--teal-dark); font: 700 2rem 'Space Grotesk'; }
+        .general-panel { padding: 0 24px; overflow-x: auto; }
+        .general-panel h2 { margin: 0; padding: 22px 0 16px; font-size: 1.35rem; }
+        .general-table { width: 100%; min-width: 900px; border-collapse: collapse; }
+        .general-table th, .general-table td { padding: 15px 10px 15px 0; border-top: 1px solid var(--line); text-align: left; vertical-align: top; }
+        .general-table th { color: var(--muted); font-size: .76rem; letter-spacing: .08em; text-transform: uppercase; }
+        .general-table td strong, .general-table td small { display: block; }
+        .general-table td small { margin-top: 4px; color: var(--muted); }
+        .general-table form { margin: 0; }
+        .pending { color: #9a6500; font-weight: 700; }
+        .completed { color: #087f78; font-weight: 700; }
+        @media (max-width: 760px) { .general-shell { display: block; } .general-sidebar { width: auto; } .general-main { width: min(100% - 24px, 1280px); padding-top: 28px; } .general-stats { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body class="general-portal">
+<div class="general-shell">
+    <aside class="general-sidebar">
+        <div class="general-brand"><img src="{% static 'images/yovaa-transit-logo.svg' %}" alt="YOVAA"><span>YOVAA<br>Transport</span></div>
+        <div class="portal-sidebar-title">General Public</div>
+        <nav class="general-menu">
+            <a class="{% if active_section == 'applications' %}active{% endif %}" href="{% url 'transport_general_portal' %}?section=applications">Application List</a>
+            <a class="{% if active_section == 'payments' %}active{% endif %}" href="{% url 'transport_general_portal' %}?section=payments">Payment List</a>
+        </nav>
+        <div class="general-profile"><strong>transportadmin</strong><small>System Administrator</small></div>
+    </aside>
+    <div class="general-content">
+        <header class="general-header"><div class="general-header-inner"><div class="brand"><img class="brand-logo" src="{% static 'images/yovaa-transit-logo.svg' %}" alt="YOVAA"><span>YOVAA Transport Administration</span></div><div><a class="button secondary" href="{% url 'transport_admin' %}">Dashboard</a> <a class="button" href="{% url 'admin_logout' %}">Logout</a></div></div></header>
+        <main class="general-main">
+            <div class="general-heading"><div><h1>{% if active_section == 'payments' %}Payment List{% else %}Application List{% endif %}</h1><p>Review general public applications and verify payments before issuing e-passes.</p></div><span class="eyebrow">General public</span></div>
+            <section class="general-stats"><article class="general-stat"><small>Total applications</small><strong>{{ applications|length }}</strong></article><article class="general-stat"><small>Payment pending</small><strong>{{ pending_count }}</strong></article><article class="general-stat"><small>Payment completed</small><strong>{{ paid_count }}</strong></article></section>
+            <section class="general-panel">
+                {% if active_section == 'payments' %}
+                    <h2>Payment List</h2>
+                    {% if payments %}<table class="general-table"><thead><tr><th>Application</th><th>Applicant</th><th>Amount</th><th>Payment status</th><th>Action</th></tr></thead><tbody>{% for payment in payments %}<tr><td>{{ payment.application.application_number }}</td><td><strong>{{ payment.application.full_name }}</strong><small>{{ payment.application.district|default:"District not provided" }}</small></td><td>&#8377;{{ payment.amount }}</td><td class="{% if payment.status == 'PENDING' %}pending{% else %}completed{% endif %}">{{ payment.get_status_display }}</td><td>{% if payment.status == 'PENDING' %}<form method="POST" action="{% url 'transport_verify_general_payment' payment.application.id %}">{% csrf_token %}<button type="submit">Verify Payment</button></form>{% else %}Verified{% endif %}</td></tr>{% endfor %}</tbody></table>{% else %}<p>No general public payments found.</p>{% endif %}
+                {% else %}
+                    <h2>Application List</h2>
+                    {% if applications %}<table class="general-table"><thead><tr><th>Applicant</th><th>Contact</th><th>Address</th><th>Travel route</th><th>Amount</th><th>Status</th></tr></thead><tbody>{% for application in applications %}<tr><td><strong>{{ application.full_name }}</strong><small>{{ application.application_number }}</small></td><td>{{ application.phone_number }}</td><td>{{ application.address }}<small>{{ application.district|default:"District not provided" }}</small></td><td>{{ application.route }}<small>{{ application.start_point }} to {{ application.destination_point }}</small></td><td>&#8377;{% if application.application_type == 'RENEWAL' %}50{% else %}1100{% endif %}</td><td class="{% if application.status == 'PAYMENT_PENDING' %}pending{% else %}completed{% endif %}">{{ application.get_status_display }}{% if application.epass %}<small>E-pass generated</small>{% endif %}</td></tr>{% endfor %}</tbody></table>{% else %}<p>No general public applications found.</p>{% endif %}
+                {% endif %}
+            </section>
+        </main>
+    </div>
+</div>
+</body>
+</html>

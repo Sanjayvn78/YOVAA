@@ -1,0 +1,245 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YOVAA | Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+    <style>
+        :root {
+            --bg: #edf3f1;
+            --bg-soft: #f8faf9;
+            --card: rgba(255,255,255,0.45);
+            --card-border: #dfe9e7;
+            --ink: #1f2d3a;
+            --muted: #687d88;
+            --teal: #0b7c7d;
+            --teal-dark: #0a5d5f;
+            --orange: #d9663b;
+            --shadow: rgba(20, 32, 40, 0.08);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(11,124,125,0.08), transparent 30%),
+                linear-gradient(180deg, var(--bg-soft) 0%, var(--bg) 100%);
+            color: var(--ink);
+        }
+
+        .admin-shell {
+            width: min(1200px, calc(100% - 48px));
+            margin: 0 auto;
+            padding: 28px 0 80px;
+        }
+
+        .admin-topbar {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6px;
+            margin-bottom: 28px;
+        }
+
+        .brand-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            color: var(--ink);
+        }
+
+        .brand-mark {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, #0a5f60, #0d6f70);
+            position: relative;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);
+        }
+
+        .brand-mark::before {
+            content: "";
+            position: absolute;
+            inset: 5px 5px 6px 6px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 4px;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            transform: skewY(-10deg);
+        }
+
+        .workspace-tag {
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            font-size: 0.9rem;
+            color: var(--teal-dark);
+            font-weight: 700;
+        }
+
+        .admin-kicker {
+            display: inline-block;
+            margin: 18px 0 10px;
+            color: var(--teal);
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .admin-title {
+            margin: 0;
+            font-size: clamp(4rem, 5.7vw, 8rem);
+            line-height: 0.92;
+            letter-spacing: -0.07em;
+            color: var(--ink);
+            font-weight: 800;
+        }
+
+        .admin-title .dot {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #1a2b3a;
+            margin-left: 10px;
+            transform: translateY(-18px);
+            box-shadow: 0 0 0 4px rgba(26,43,58,0.05);
+        }
+
+        .admin-subtitle {
+            margin: 24px 0 36px;
+            color: #677d87;
+            font-size: 1.05rem;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 860px;
+        }
+
+        .admin-card {
+            min-height: 260px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px 22px 18px;
+            border: 2px solid rgba(32, 154, 90, 0.9);
+            border-radius: 16px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.42), rgba(255,255,255,0.18));
+            box-shadow: 0 10px 24px var(--shadow);
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+        }
+
+        .admin-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 30px rgba(18, 31, 37, 0.12);
+            border-color: rgba(23, 128, 75, 1);
+        }
+
+        .tag {
+            display: inline-block;
+            margin-bottom: 16px;
+            color: var(--orange);
+            font-size: 1.04rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .admin-card h3 {
+            margin: 0 0 16px;
+            font-size: clamp(1.35rem, 2vw, 1.9rem);
+            color: var(--ink);
+            font-weight: 800;
+        }
+
+        .admin-card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 1.03rem;
+            line-height: 1.55;
+            max-width: 320px;
+        }
+
+        .admin-card a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 26px;
+            color: var(--teal-dark);
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.04rem;
+            transition: transform 0.18s ease;
+        }
+
+        .admin-card a:hover {
+            transform: translateX(2px);
+            text-decoration: none;
+        }
+
+        @media (max-width: 720px) {
+            .admin-shell {
+                width: min(100% - 24px, 620px);
+                padding-top: 18px;
+            }
+
+            .admin-topbar {
+                margin-bottom: 18px;
+            }
+
+            .workspace-tag {
+                letter-spacing: 0.12em;
+                font-size: 0.7rem;
+            }
+
+            .admin-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="admin-shell">
+        <nav class="admin-topbar">
+            <div class="brand-wrap">
+                <span class="brand-mark" aria-hidden="true"></span>
+                <span>YOVAA</span>
+            </div>
+            <div class="workspace-tag">Operations Workspace</div>
+        </nav>
+
+        <div class="admin-kicker">Admin control center</div>
+        <h1 class="admin-title">Keep every route moving<span class="dot" aria-hidden="true"></span></h1>
+        <p class="admin-subtitle">Choose the team you work with today.</p>
+
+        <section class="admin-grid">
+            <article class="admin-card">
+                <div>
+                    <span class="tag">School</span>
+                    <h3>School Admin</h3>
+                    <p>Verify EMIS students and create school pass applications.</p>
+                </div>
+                <a href="/admins/school/">Open Dashboard →</a>
+            </article>
+
+            <article class="admin-card">
+                <div>
+                    <span class="tag">College</span>
+                    <h3>College Admin</h3>
+                    <p>Review UMIS-backed college applications.</p>
+                </div>
+                <a href="/admins/college/dashboard/">Open workspace →</a>
+            </article>
+        </section>
+    </main>
+</body>
+</html>

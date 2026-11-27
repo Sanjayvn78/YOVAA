@@ -1,0 +1,6 @@
+{% load static %}
+<!DOCTYPE html>
+<html><head><link rel="stylesheet" href="{% static 'css/yovaa.css' %}"><title>YOVAA - College Login</title></head><body><main class="page-shell"><header class="page-header">{% include "partials/yovaa_brand.html" %}<span class="eyebrow">College access</span></header><section class="card form-card">
+<h1>College Student Login</h1><p>Sign in to apply, track verification, and access your digital pass.</p>{% if error %}<p class="error">{{ error }}</p>{% endif %}
+<form method="POST">{% csrf_token %}<input type="hidden" name="next" value="{{ next }}"><label>College Email</label><br><input type="email" name="identifier" required><br><br><label>Password</label><br><input type="password" name="password" required><br><br><button type="submit">Login</button></form>
+<p>New to YOVAA? <a href="{% url 'college_register' %}{% if next %}?next={{ next|urlencode }}{% endif %}">Create a college account</a></p></section></main></body></html>

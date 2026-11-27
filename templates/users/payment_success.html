@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - Payment Success</title>
+</head>
+<body><main class="page-shell"><header class="page-header">{% include "partials/yovaa_brand.html" %}<span class="eyebrow">Payment confirmed</span></header><section class="card success-card">
+    <div class="success-icon">✓</div><h1>Payment Successful</h1><p>Your payment has been received. Your digital bus pass is ready.</p>
+    <div class="detail-grid"><div class="detail-item"><small>Application Number</small><strong>{{ application.application_number }}</strong></div><div class="detail-item"><small>Name</small><strong>{{ application.full_name }}</strong></div><div class="detail-item"><small>Transaction ID</small><strong>{{ payment.transaction_id }}</strong></div><div class="detail-item"><small>Amount Paid</small><strong>&#8377;{{ payment.amount }}</strong></div><div class="detail-item"><small>Paid At</small><strong>{{ payment.paid_at }}</strong></div><div class="detail-item"><small>Status</small><strong>Payment Completed</strong></div></div>
+    <div class="action-row">{% if application.pass_type == "SCHOOL" %}<a class="button" href="{% url 'e_pass' application.epass.id %}">View E-Pass</a><a class="button secondary" href="{% url 'e_pass_download_alt' application.epass.id %}">Download Your ePass</a>{% else %}<a class="button" href="/users/epass/{{ application.id }}/">View E-Pass</a><a class="button secondary" href="/users/epass/{{ application.id }}/download/">Download Your ePass</a>{% endif %}<a class="button secondary" href="{% if request.user.profile.role == 'SCHOOL_ADMIN' or request.user.profile.role == 'COLLEGE_ADMIN' or request.user.profile.role == 'TRANSPORT_ADMIN' or request.user.profile.role == 'CONDUCTOR' %}{% url 'admin_dashboard' %}{% elif application.pass_type == 'SPECIAL' %}{% url 'special_dashboard' %}{% else %}{% url 'account_dashboard' %}{% endif %}">Back to Dashboard</a></div>
+</section></main></body>
+</html>

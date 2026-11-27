@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - Travel Details</title>
+</head>
+<body>
+<main class="page-shell"><header class="page-header">{% include "partials/yovaa_brand.html" %}<span class="eyebrow">College application</span></header><section class="card form-card">
+    <h1>Bus Pass Application</h1>
+
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+
+    <h2>Student Details</h2>
+    <div class="detail-grid">
+        <div class="detail-item"><small>Name</small><strong>{{ student.name }}</strong></div>
+        <div class="detail-item"><small>Registration Number</small><strong>{{ student.registration_number }}</strong></div>
+        <div class="detail-item"><small>College</small><strong>{{ student.college_name }}</strong></div>
+        <div class="detail-item"><small>Department</small><strong>{{ student.department }}</strong></div>
+    </div>
+
+    <hr>
+    <h2>Travel Details</h2>
+
+    <form method="POST" enctype="multipart/form-data" action="{% url 'college_details' %}">
+        {% csrf_token %}
+        <input type="hidden" name="student_id" value="{{ student.id }}">
+
+        <input type="hidden" name="state" value="{{ student.state }}">
+        <input type="hidden" name="district" value="Coimbatore">
+
+        {% include "users/route_fields.html" %}
+
+        <hr>
+        <h2>Required Documents</h2>
+
+        <label>Applicant Photo (JPG / PNG)</label><br>
+        <input type="file" name="applicant_photo" accept=".jpg,.jpeg,.png" required>
+        <br><br>
+
+        <label>Aadhaar Document (PDF)</label><br>
+        <input type="file" name="aadhaar_document" accept="application/pdf,.pdf" required>
+        <br><br>
+
+        <label>Signature Document (PDF)</label><br>
+        <input type="file" name="signature_document" accept="application/pdf,.pdf" required>
+        <br><br>
+
+        <button type="submit">Submit Application</button>
+    </form></section></main>
+</body>
+</html>

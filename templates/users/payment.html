@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - Payment</title>
+</head>
+<body>
+<main class="page-shell"><header class="page-header">{% include "partials/yovaa_brand.html" %}<span class="eyebrow">General pass · payment</span></header><section class="card form-card flow-card">
+    <div class="flow-intro"><div><span class="eyebrow">Secure checkout</span><h1>Complete your payment</h1><p>Your application is ready. Choose a payment method and submit it for Transport Admin verification.</p></div><span class="flow-step">03 / 03</span></div>
+    <div class="detail-grid"><div class="detail-item"><small>Application</small><strong>{{ application.application_number }}</strong></div><div class="detail-item"><small>Applicant</small><strong>{{ application.full_name }}</strong></div><div class="detail-item"><small>Pass type</small><strong>{{ application.get_pass_type_display }}</strong></div><div class="detail-item"><small>Review state</small><strong>Ready for payment</strong></div></div>
+    <hr><h2>Fee summary</h2>
+
+    {% if application.pass_type == "SCHOOL" %}
+        <p>School pass registration fee: &#8377;30</p>
+    {% elif application.pass_type == "DISABLED" %}
+        <p>Monthly pass: &#8377;500</p>
+        <p>New registration fee: &#8377;50</p>
+    {% elif application.pass_type == "GENERAL" %}
+        <p>Application fee: &#8377;1000</p>
+        <p>Registration fee: &#8377;100</p>
+    {% endif %}
+    <div class="fee-summary">{% if application.pass_type == "GENERAL" %}<div class="fee-row"><span>Application fee</span><strong>&#8377;1000</strong></div><div class="fee-row"><span>Registration fee</span><strong>&#8377;100</strong></div>{% endif %}{% if application.pass_type == "DISABLED" %}<div class="fee-row"><span>Monthly pass</span><strong>&#8377;500</strong></div><div class="fee-row"><span>Registration fee</span><strong>&#8377;50</strong></div>{% endif %}<div class="fee-row total"><span>Total payable</span><strong>&#8377;{{ payment.amount }}</strong></div></div>
+    <form method="POST">
+        {% csrf_token %}
+
+        <h2>Payment method</h2><div class="choice-grid"><label class="choice-card"><input type="radio" name="payment_method" value="UPI" checked><span><strong>UPI</strong><small>Pay using your UPI ID</small></span></label><label class="choice-card"><input type="radio" name="payment_method" value="QR"><span><strong>QR payment</strong><small>Scan and complete payment</small></span></label></div><label for="upi-id">UPI ID <span>(optional)</span></label><input id="upi-id" type="text" name="upi_id" placeholder="name@bank">
+        <div class="form-actions"><p class="form-note">Payment will be verified by Transport Admin.</p><button type="submit">Submit payment · &#8377;{{ payment.amount }}</button></div>
+    </form></section></main>
+</body>
+</html>

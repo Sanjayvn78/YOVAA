@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - College Bus Pass</title>
+</head>
+<body>
+<main class="page-shell"><header class="page-header">{% include "partials/yovaa_brand.html" %}<span class="eyebrow">College application</span></header><section class="card form-card">
+    <h1>College Bus Pass</h1>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <p>Enter your UMIS number or college registration number to verify your details.</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <label>UMIS Number / Registration Number</label><br>
+        <input type="text" name="registration_number" required>
+        <br><br>
+        <button type="submit">Verify Through UMIS</button>
+    </form></section></main>
+</body>
+</html>

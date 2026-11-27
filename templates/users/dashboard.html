@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YOVAA | User Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+</head>
+<body>
+<main class="shell">
+    <nav class="topbar">
+        {% include "partials/yovaa_brand.html" %}
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;"><a class="button secondary" href="{% url 'home' %}">&larr; Back to Home</a><a class="button" href="{% url 'account_logout' %}">Logout</a></div>
+    </nav>
+    <div class="toolbar">
+        <div><span class="eyebrow">Your mobility hub</span><h1>Choose your pass.</h1><p>Start an application or track a pass already in motion.</p></div>
+    </div>
+    <section class="module-grid">
+        <article class="module"><div><span class="tag">01</span><h3>Disabled Person Pass</h3><p>Verified through the disability dataset.</p></div><a href="/users/apply/disabled/">Start application →</a></article>
+        <article class="module"><div><span class="tag">02</span><h3>General Pass</h3><p>A direct route for everyday travel.</p></div><a href="/users/apply/general/">Start application →</a></article>
+        <article class="module"><div><span class="tag">03</span><h3>Special Pass</h3><p>For eligible transport staff.</p></div><a href="/users/apply/special/">Start application →</a></article>
+    </section>
+    <hr>
+    <div class="toolbar"><h2>My applications</h2><span class="eyebrow">Secure digital pass history</span></div>
+    {% for application in applications %}
+        <article class="application"><div class="toolbar"><div><h3>{{ application.application_number }}</h3><p>{{ application.get_pass_type_display }}</p></div><span class="status">{{ application.get_status_display }}</span></div><a href="/users/application/{{ application.id }}/">View application →</a>{% if application.status == "PAYMENT_PENDING" %}<a style="margin-left:15px" href="/users/payment/{{ application.id }}/">Pay now →</a>{% endif %}{% if application.status == "PAYMENT_COMPLETED" %}<a style="margin-left:15px" href="/users/epass/{{ application.id }}/">View E-Pass →</a><a style="margin-left:15px" href="/users/epass/{{ application.id }}/download/">Download Your ePass →</a>{% endif %}</article>
+    {% empty %}<p>No applications yet. Your next journey starts above.</p>{% endfor %}
+</main>
+</body>
+</html>

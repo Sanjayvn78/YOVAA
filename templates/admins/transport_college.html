@@ -1,0 +1,433 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YOVAA - College Student Portal</title>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: #f3f5f8;
+            color: #111827;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .portal-shell {
+            display: flex;
+            min-height: 100vh;
+            background: #f3f5f8;
+        }
+        .portal-sidebar {
+            width: 270px;
+            background: #0e1c2d;
+            color: #eaf1ff;
+            padding: 22px 18px;
+        }
+        .portal-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+            margin: 8px 8px 28px;
+        }
+        .portal-brand-mark {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #3c9bff, #2257d9);
+        }
+        .portal-sidebar-title {
+            margin: 22px 10px 12px;
+            color: #8a9ab0;
+            font-size: .72rem;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        .portal-menu { display: grid; gap: 8px; }
+        .portal-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: #dfeafc;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .portal-menu a.active {
+            background: #2e6ae6;
+            color: #fff;
+        }
+        .portal-menu-icon { width: 18px; text-align: center; }
+        .portal-profile {
+            margin-top: 36px;
+            padding: 14px 12px;
+            border-radius: 12px;
+            background: rgba(255,255,255,.04);
+        }
+        .portal-profile .user-name { display: block; font-weight: 700; color: #fff; }
+        .portal-profile .user-role { display: block; color: #a3b3c8; font-size: .8rem; margin-top: 4px; }
+        .portal-main { flex: 1; padding: 26px 28px 38px; }
+        .portal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 0 0 18px;
+            border-bottom: 1px solid #dfe5ee;
+        }
+        .portal-header h1 {
+            margin: 0;
+            color: #111827;
+            font-size: 2.2rem;
+            font-weight: 800;
+        }
+        .portal-header p {
+            margin: 4px 0 0;
+            color: #6b7280;
+        }
+        .portal-topbar {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+        .portal-bell {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(10,21,36,.08);
+            color: #f35454;
+        }
+        .portal-admin-pill {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .portal-admin-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #2f6ae6;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            font-weight: 700;
+        }
+        .portal-admin-name { font-weight: 700; color: #111827; }
+        .portal-admin-role { display: block; color: #6b7280; font-size: .8rem; }
+        .portal-page { padding-top: 28px; }
+        .portal-welcome {
+            font-size: 2.15rem;
+            font-weight: 800;
+            margin: 8px 0 26px;
+            color: #111827;
+        }
+        .portal-stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+        .portal-stat {
+            background: #fff;
+            border: 1px solid #e4e7ed;
+            border-radius: 14px;
+            padding: 18px 18px 14px;
+            box-shadow: 0 4px 18px rgba(15,23,42,.03);
+        }
+        .portal-stat-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 26px;
+        }
+        .portal-stat-label { color: #2a3342; font-size: .95rem; font-weight: 600; }
+        .portal-stat-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            font-size: .9rem;
+        }
+        .portal-stat-value {
+            font-size: 2.2rem;
+            line-height: 1;
+            margin: 0;
+            color: #111827;
+            font-weight: 800;
+        }
+        .portal-stat-note { color: #6b7280; font-size: .9rem; margin-top: 8px; }
+        .portal-stat-icon.blue { background: #edf4ff; color: #2d69dd; }
+        .portal-stat-icon.gray { background: #f1f3f5; color: #5f6d7f; }
+        .portal-stat-icon.green { background: #edfef2; color: #2f9d5f; }
+        .portal-stat-icon.red { background: #fff0f0; color: #db4c4c; }
+        .portal-stat-icon.orange { background: #fff4ea; color: #d9822b; }
+        .portal-panel {
+            background: #fff;
+            border: 1px solid #e4e7ed;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(15,23,42,.03);
+        }
+        .portal-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 20px 16px;
+            border-bottom: 1px solid #edf1f5;
+        }
+        .portal-panel-header h3 { margin: 0; color: #111827; font-size: 1.05rem; }
+        .portal-table-wrap { padding: 0 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td {
+            padding: 14px 0;
+            text-align: left;
+            border-bottom: 1px solid #edf1f5;
+            color: #334155;
+        }
+        th {
+            color: #6b7280;
+            font-size: .75rem;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        td strong { color: #111827; }
+        .portal-status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: .75rem;
+            font-weight: 700;
+        }
+        .status-blue { background: #ebf2ff; color: #2d69dd; }
+        .status-green { background: #ebfdf2; color: #1f9d5a; }
+        .status-gray { background: #f3f4f6; color: #4b5563; }
+        .status-red { background: #fff0f0; color: #d94d4d; }
+        .portal-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+            padding-bottom: 18px;
+        }
+        .portal-actions form { margin: 0; }
+        .portal-actions button {
+            border: 0;
+            border-radius: 8px;
+            padding: 10px 14px;
+            background: #2e6ae6;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .portal-empty {
+            padding: 26px 20px 28px;
+            color: #6b7280;
+        }
+        @media (max-width: 980px) {
+            .portal-shell { display: block; }
+            .portal-sidebar { width: 100%; }
+            .portal-main { padding: 20px 18px 30px; }
+            .portal-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 600px) {
+            .portal-brand { font-size: 1.6rem; }
+            .portal-header { display: block; }
+            .portal-topbar { justify-content: flex-end; margin-top: 16px; }
+            .portal-stats { grid-template-columns: 1fr; }
+            .portal-header h1 { font-size: 1.8rem; }
+            .portal-welcome { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="portal-shell">
+        <aside class="portal-sidebar">
+            <div class="portal-brand">
+                <img class="brand-logo" src="{% static 'images/yovaa-transit-logo.svg' %}" alt="YOVAA">
+                <span>YOVAA Transport</span>
+            </div>
+
+            <div class="portal-sidebar-title">Transport Administration</div>
+            <nav class="portal-menu">
+                <a href="{% url 'transport_college_portal' %}?section=dashboard" class="{% if active_section == 'dashboard' %}active{% endif %}"><span class="portal-menu-icon">▣</span> Dashboard</a>
+                <a href="{% url 'transport_college_portal' %}?section=applications" class="{% if active_section == 'applications' %}active{% endif %}"><span class="portal-menu-icon">◉</span> Applications</a>
+                <a href="{% url 'transport_college_portal' %}?section=payments" class="{% if active_section == 'payments' %}active{% endif %}"><span class="portal-menu-icon">₹</span> Payments</a>
+            </nav>
+
+            <div class="portal-sidebar-title">Management</div>
+            <nav class="portal-menu">
+                <a href="{% url 'transport_college_portal' %}?section=approved" class="{% if active_section == 'approved' %}active{% endif %}"><span class="portal-menu-icon">✓</span> Approved Students</a>
+                <a href="{% url 'transport_college_portal' %}?section=epass" class="{% if active_section == 'epass' %}active{% endif %}"><span class="portal-menu-icon">▣</span> E-Pass Management</a>
+            </nav>
+
+            <div class="portal-profile">
+                <span class="user-name">transportadmin</span>
+                <span class="user-role">System Administrator</span>
+            </div>
+        </aside>
+
+        <main class="portal-main">
+            <header class="portal-header">
+                <div>
+                    <h1>College Student Portal</h1>
+                    <p>Review college applications and manage pass approvals</p>
+                </div>
+                <div class="portal-topbar">
+                    <div class="portal-bell">🔔</div>
+                    <div class="portal-admin-pill">
+                        <div class="portal-admin-avatar">TA</div>
+                        <div>
+                            <span class="portal-admin-name">transportadmin</span>
+                            <span class="portal-admin-role">Administrator</span>
+                        </div>
+                    </div>
+                    <div><a class="button secondary" href="{% url 'transport_admin' %}">Dashboard</a> <a class="button" href="{% url 'admin_logout' %}">Logout</a></div>
+                </div>
+            </header>
+
+            <section class="portal-page">
+                <h2 class="portal-welcome">{% if active_section == 'applications' %}College Applications{% elif active_section == 'payments' %}Payments{% elif active_section == 'approved' %}Approved Students{% elif active_section == 'epass' %}E-Pass Management{% else %}Transport Administration{% endif %}</h2>
+
+                {% if active_section == 'applications' %}
+                <div class="portal-stats">
+                    <article class="portal-stat">
+                        <div class="portal-stat-head">
+                            <span class="portal-stat-label">Total</span>
+                            <span class="portal-stat-icon blue">◉</span>
+                        </div>
+                        <p class="portal-stat-value">{{ applications|length }}</p>
+                        <div class="portal-stat-note">Applications in queue</div>
+                    </article>
+
+                    <article class="portal-stat">
+                        <div class="portal-stat-head">
+                            <span class="portal-stat-label">Pending</span>
+                            <span class="portal-stat-icon gray">⏳</span>
+                        </div>
+                        <p class="portal-stat-value">{{ pending_count }}</p>
+                        <div class="portal-stat-note">Awaiting review</div>
+                    </article>
+
+                    <article class="portal-stat">
+                        <div class="portal-stat-head">
+                            <span class="portal-stat-label">Approved</span>
+                            <span class="portal-stat-icon green">✓</span>
+                        </div>
+                        <p class="portal-stat-value">{{ approved_count }}</p>
+                        <div class="portal-stat-note">Approved for pass</div>
+                    </article>
+
+                    <article class="portal-stat">
+                        <div class="portal-stat-head">
+                            <span class="portal-stat-label">Rejected</span>
+                            <span class="portal-stat-icon red">✕</span>
+                        </div>
+                        <p class="portal-stat-value">{{ rejected_count }}</p>
+                        <div class="portal-stat-note">Rejected applications</div>
+                    </article>
+                </div>
+
+                <section class="portal-panel">
+                    <div class="portal-panel-header">
+                        <h3>Application List</h3>
+                        <a href="{% url 'transport_admin' %}" style="color:#2d69dd; text-decoration:none;">Back to modules</a>
+                    </div>
+                    {% if applications %}
+                    <div class="portal-table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>College</th>
+                                    <th>Route</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for application in applications %}
+                                <tr>
+                                    <td><strong>{{ application.full_name }}</strong><br><small>{{ application.application_number }}</small></td>
+                                    <td>{{ application.college_name|default:'N/A' }}</td>
+                                    <td>{{ application.route|default:'N/A' }}</td>
+                                    <td>
+                                        {% if application.status == 'TRANSPORT_VERIFICATION' %}
+                                            <span class="portal-status status-blue">{{ application.get_status_display }}</span>
+                                        {% elif application.status == 'COLLEGE_APPROVED' or application.status == 'PAYMENT_PENDING' or application.status == 'PAYMENT_COMPLETED' %}
+                                            <span class="portal-status status-green">{{ application.get_status_display }}</span>
+                                        {% elif application.status == 'COLLEGE_REJECTED' %}
+                                            <span class="portal-status status-red">{{ application.get_status_display }}</span>
+                                        {% else %}
+                                            <span class="portal-status status-gray">{{ application.get_status_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="portal-actions">
+                                            {% if application.status == 'TRANSPORT_VERIFICATION' %}
+                                                <form method="POST" action="{% url 'transport_send_college' application.id %}">{% csrf_token %}<button type="submit">Send to College</button></form>
+                                            {% endif %}
+                                            {% if application.status == 'COLLEGE_APPROVED' %}
+                                                <form method="POST" action="{% url 'transport_allow_payment' application.id %}">{% csrf_token %}<button type="submit">Allow Payment</button></form>
+                                            {% endif %}
+                                            {% if application.status == 'PAYMENT_PENDING' %}
+                                                {% if application.payment.status == 'PENDING' %}
+                                                    <form method="POST" action="{% url 'transport_verify_payment' application.id %}">{% csrf_token %}<button type="submit">Verify Payment</button></form>
+                                                {% else %}
+                                                    <span class="portal-status status-gray">Awaiting payment</span>
+                                                {% endif %}
+                                            {% endif %}
+                                            {% if application.status == 'PAYMENT_COMPLETED' %}
+                                                <span class="portal-status status-green">Payment complete</span>
+                                            {% endif %}
+                                            <a class="portal-status status-blue" href="{% url 'transport_college_application_detail' application.id %}">View Documents</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="portal-empty">No college applications found.</div>
+                    {% endif %}
+                </section>
+                {% elif active_section == 'dashboard' %}
+                <section class="portal-panel"><div class="portal-empty">Choose an option from the menu to view its details.</div></section>
+                {% elif active_section == 'payments' %}
+                <section class="portal-panel">
+                    <div class="portal-panel-header"><h3>Paid Students</h3></div>
+                    {% if paid_payments %}
+                    <div class="portal-table-wrap"><table><thead><tr><th>Student</th><th>College</th><th>Amount</th><th>Method</th><th>Transaction</th><th>Paid At</th></tr></thead><tbody>
+                        {% for payment in paid_payments %}<tr><td><strong>{{ payment.application.full_name }}</strong><br><small>{{ payment.application.application_number }}</small></td><td>{{ payment.application.college_name|default:'N/A' }}</td><td>&#8377;{{ payment.amount }}</td><td>{{ payment.get_payment_method_display }}</td><td>{{ payment.transaction_id }}</td><td>{{ payment.paid_at|date:'d M Y, h:i A' }}</td></tr>{% endfor %}
+                    </tbody></table></div>
+                    {% else %}<div class="portal-empty">No successful payments found.</div>{% endif %}
+                </section>
+                {% elif active_section == 'approved' %}
+                <section class="portal-panel">
+                    <div class="portal-panel-header"><h3>Approved Students</h3></div>
+                    {% if approved_applications %}
+                    <div class="portal-table-wrap"><table><thead><tr><th>Student Name</th><th>College Name</th><th>Application</th><th>Status</th></tr></thead><tbody>
+                        {% for application in approved_applications %}<tr><td><strong>{{ application.full_name }}</strong></td><td>{{ application.college_name|default:'N/A' }}</td><td>{{ application.application_number }}</td><td><span class="portal-status status-green">{{ application.get_status_display }}</span></td></tr>{% endfor %}
+                    </tbody></table></div>
+                    {% else %}<div class="portal-empty">No approved students found.</div>{% endif %}
+                </section>
+                {% elif active_section == 'epass' %}
+                <section class="portal-panel"><div class="portal-empty">E-Pass management details will appear here.</div></section>
+                {% else %}
+                <section class="portal-panel"><div class="portal-empty">Choose an option from the menu to view its details.</div></section>
+                {% endif %}
+            </section>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head><link rel="stylesheet" href="{% static 'css/yovaa.css' %}"><title>YOVAA - General Pass</title></head>
+<body><main class="page-shell"><header class="page-header">{% include "partials/yovaa_brand.html" %}<span class="eyebrow">General pass · Step 1 of 2</span></header>
+<section class="card form-card flow-card"><div class="flow-intro"><div><span class="eyebrow">Applicant profile</span><h1>Tell us about yourself</h1><p>Enter your details once. We will use them to prepare your pass application and verification record.</p></div><span class="flow-step">01 / 02</span></div>{% if error %}<p class="error">{{ error }}</p>{% endif %}
+<form method="POST">
+    {% csrf_token %}
+    <section class="form-section"><h2>Personal details</h2><p>Use the same name and contact details shown on your identity proof.</p><div class="field-grid"><div class="field"><label for="full-name">Full name</label><input id="full-name" type="text" name="full_name" autocomplete="name" required></div><div class="field"><label for="date-of-birth">Date of birth</label><input id="date-of-birth" type="date" name="date_of_birth" required></div><div class="field"><label for="phone-number">Phone number</label><input id="phone-number" type="tel" name="phone_number" autocomplete="tel" required></div><div class="field field-wide"><label for="address">Residential address</label><textarea id="address" name="address" rows="3" autocomplete="street-address" required></textarea></div></div></section>
+    <div class="form-actions"><p class="form-note">Your information is used only for pass processing.</p><button type="submit">Continue to travel details <span aria-hidden="true">→</span></button></div>
+</form></section></main></body></html>

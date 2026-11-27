@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+    <title>YOVAA - Special Pass Documents</title>
+</head>
+<body>
+<main class="page-shell">
+    <header class="page-header">
+        {% include "partials/yovaa_brand.html" %}
+        <a class="button secondary" href="{% url 'special_dashboard' %}">&larr; Back to Dashboard</a>
+    </header>
+    <section class="card form-card">
+        <span class="eyebrow">Step 1 of 2</span>
+        <h1>Confirm Your Details</h1>
+        <p>Review your verified staff information, then submit the four documents required to issue your free all-bus pass.</p>
+        <div class="detail-grid">
+            <div class="detail-item"><small>Name</small><strong>{{ staff.name }}</strong></div>
+            <div class="detail-item"><small>Staff ID</small><strong>{{ staff.staff_number }}</strong></div>
+            <div class="detail-item"><small>Department</small><strong>{{ staff.department }}</strong></div>
+            <div class="detail-item"><small>Designation</small><strong>{{ staff.designation }}</strong></div>
+            <div class="detail-item"><small>Workplace</small><strong>{{ staff.workplace }}</strong></div>
+            <div class="detail-item"><small>District</small><strong>{{ staff.district|default:"-" }}</strong></div>
+        </div>
+        {% if missing_documents %}<p class="form-error">Upload all required documents: {{ missing_documents|join:", " }}.</p>{% endif %}
+        <hr>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="upload-grid">
+                <div class="upload-field"><label for="applicant-photo">01 - Photo</label><input id="applicant-photo" type="file" name="applicant_photo" accept=".jpg,.jpeg,.png" required><small>JPG or PNG</small></div>
+                <div class="upload-field"><label for="address-proof">02 - Address Proof</label><input id="address-proof" type="file" name="address_proof_document" accept=".pdf,.jpg,.jpeg,.png" required><small>PDF, JPG, or PNG</small></div>
+                <div class="upload-field"><label for="signature-document">03 - Signature</label><input id="signature-document" type="file" name="signature_document" accept=".pdf,.jpg,.jpeg,.png" required><small>PDF, JPG, or PNG</small></div>
+                <div class="upload-field"><label for="staff-id-card">04 - Staff ID Card</label><input id="staff-id-card" type="file" name="staff_id_card_document" accept=".pdf,.jpg,.jpeg,.png" required><small>PDF, JPG, or PNG</small></div>
+            </div>
+            <div class="form-actions"><span class="form-note">Your pass will be generated after all documents are submitted.</span><button type="submit">Submit and Generate Pass <span aria-hidden="true">&rarr;</span></button></div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - Disabled Pass Application</title>
+</head>
+<body>
+
+    <h1>Disabled Person Pass Application</h1>
+
+    <h2>Verified Person</h2>
+
+    <p>
+        <strong>Disability ID:</strong>
+        {{ person.disability_id }}
+    </p>
+
+    <p>
+        <strong>Name:</strong>
+        {{ person.name }}
+    </p>
+
+    <p>
+        <strong>Disability:</strong>
+        {{ person.disability_type }}
+    </p>
+
+    <hr>
+
+    <h2>Travel Details</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Route</label><br>
+        <input type="text" name="route" required>
+
+        <br><br>
+
+        <label>Starting Point</label><br>
+        <input type="text" name="start_point" required>
+
+        <br><br>
+
+        <label>Destination Point</label><br>
+        <input type="text" name="destination_point" required>
+
+        <br><br>
+
+        <button type="submit">
+            Submit Application
+        </button>
+    </form>
+
+</body>
+</html>

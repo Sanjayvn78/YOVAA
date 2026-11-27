@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - Pass Verification</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        .result { width: 420px; margin: auto; padding: 30px; border: 1px solid #ddd; border-radius: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="result">
+    <h1>YOVAA</h1>
+    <h2>Bus Pass Verification</h2>
+    <hr>
+
+    <form method="POST">
+        {% csrf_token %}
+        <label>Enter / Scan Pass Number</label><br>
+        <input type="text" name="pass_number" required>
+        <br><br>
+        <button type="submit">Verify Pass</button>
+    </form>
+
+    {% if result %}
+        <hr>
+        <h2>{{ result.status }}</h2>
+        <p>{{ result.message }}</p>
+
+        {% if result.pass_obj %}
+            <p><strong>Pass Number:</strong> {{ result.pass_obj.pass_number }}</p>
+            <p><strong>Passenger:</strong> {{ result.pass_obj.application.full_name }}</p>
+            <p><strong>Pass Type:</strong> {{ result.pass_obj.application.get_pass_type_display }}</p>
+            <p><strong>Valid From:</strong> {{ result.pass_obj.valid_from|default:result.pass_obj.issue_date }}</p>
+            <p><strong>Valid Until:</strong> {{ result.pass_obj.valid_until|default:result.pass_obj.expiry_date }}</p>
+        {% endif %}
+
+        {% if result.status == "VALID" %}
+            <p>ACCESS ALLOWED</p>
+        {% else %}
+            <p>ACCESS DENIED</p>
+        {% endif %}
+    {% endif %}
+</div>
+
+</body>
+</html>

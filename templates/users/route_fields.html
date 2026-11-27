@@ -1,0 +1,94 @@
+<label for="state-select">State</label><br>
+<select id="state-select" name="state" required>
+    <option value="">Select a state</option>
+</select>
+<br><br>
+
+<label for="district-select">District</label><br>
+<select id="district-select" name="district" required disabled>
+    <option value="">Select a state first</option>
+</select>
+<br><br>
+
+<label for="route-select">Route</label><br>
+<select id="route-select" name="route" required disabled>
+    <option value="">Select a district first</option>
+</select>
+<br><br>
+
+<label for="start-point-select">Starting Bus Stop</label><br>
+<select id="start-point-select" name="start_point" required disabled>
+    <option value="">Select a route first</option>
+</select>
+<br><br>
+
+<label for="destination-point-select">Destination Bus Stop</label><br>
+<select id="destination-point-select" name="destination_point" required disabled>
+    <option value="">Select a route first</option>
+</select>
+<br><br>
+
+{% load static %}
+<script src="{% static 'js/india_locations.js' %}"></script>
+<script src="{% static 'js/bus_routes.js' %}"></script>
+<script>
+    const locationCatalog = window.yovaaLocations || {};
+    const routeNetwork = window.yovaaRoutes || {};
+
+    const stateSelect = document.getElementById("state-select");
+    const districtSelect = document.getElementById("district-select");
+    const routeSelect = document.getElementById("route-select");
+    const startSelect = document.getElementById("start-point-select");
+    const destinationSelect = document.getElementById("destination-point-select");
+
+    Object.keys(locationCatalog).forEach(function (state) {
+        stateSelect.add(new Option(state, state));
+    });
+
+    function resetSelect(select, label) {
+        select.innerHTML = "";
+        select.add(new Option(label, ""));
+        select.disabled = true;
+    }
+
+    stateSelect.addEventListener("change", function () {
+        resetSelect(districtSelect, "Select a district");
+        resetSelect(routeSelect, "Select a route");
+        resetSelect(startSelect, "Select a route first");
+        resetSelect(destinationSelect, "Select a route first");
+        const districts = locationCatalog[this.value] || [];
+        districts.forEach(function (district) {
+            districtSelect.add(new Option(district, district));
+        });
+        districtSelect.disabled = districts.length === 0;
+    });
+
+    districtSelect.addEventListener("change", function () {
+        resetSelect(routeSelect, "Select a route");
+        resetSelect(startSelect, "Select a route first");
+        resetSelect(destinationSelect, "Select a route first");
+        const routes = Object.keys(
+            (routeNetwork[stateSelect.value] || {})[this.value] || {}
+        );
+        routes.forEach(function (route) {
+            routeSelect.add(new Option(route, route));
+        });
+        routeSelect.disabled = routes.length === 0;
+    });
+
+    routeSelect.addEventListener("change", function () {
+        const stops = ((routeNetwork[stateSelect.value] || {})[districtSelect.value] || {})[this.value] || [];
+        startSelect.innerHTML = "";
+        destinationSelect.innerHTML = "";
+        stops.forEach(function (stop) {
+            startSelect.add(new Option(stop, stop));
+            destinationSelect.add(new Option(stop, stop));
+        });
+        startSelect.disabled = stops.length === 0;
+        destinationSelect.disabled = stops.length === 0;
+        if (stops.length > 1) {
+            startSelect.value = stops[0];
+            destinationSelect.value = stops[stops.length - 1];
+        }
+    });
+</script>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - School Pass</title>
+</head>
+<body>
+
+    <h1>School Bus Pass Application</h1>
+
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+
+    <p>
+        Enter the student's EMIS ID.
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>EMIS Student ID</label>
+
+        <input
+            type="text"
+            name="student_id"
+            required
+        >
+
+        <button type="submit">
+            Verify with EMIS
+        </button>
+    </form>
+
+</body>
+</html>

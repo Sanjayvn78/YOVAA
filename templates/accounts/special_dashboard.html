@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+	<title>YOVAA - Staff Dashboard</title>
+	<style>
+		.special-dashboard { min-height: 100vh; }
+		.special-dashboard .topbar { margin-bottom: 58px; }
+		.dashboard-hero { display: grid; grid-template-columns: 1fr 390px; gap: 40px; align-items: center; }
+		.dashboard-hero h1 { margin: 16px 0; max-width: 680px; }
+		.staff-summary { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 25px; }
+		.staff-chip { padding: 9px 13px; border: 1px solid var(--line); border-radius: 999px; color: var(--teal-dark); background: #fff; font-size: .9rem; font-weight: 700; }
+		.generate-card { padding: 30px; border-radius: 24px; color: #fff; background: var(--teal-dark); box-shadow: var(--shadow); }
+		.generate-card h2 { margin: 12px 0 8px; }
+		.generate-card p { color: rgba(255,255,255,.78); }
+		.generate-card .button { margin-top: 18px; color: var(--ink); background: var(--yellow); }
+		.generate-card .button:hover { background: #f6d66f; }
+		.security-note { margin-top: 38px; padding: 16px 18px; border-left: 4px solid var(--coral); color: var(--muted); background: #fff; }
+		@media (max-width: 800px) { .dashboard-hero { grid-template-columns: 1fr; } .special-dashboard .topbar { margin-bottom: 35px; } }
+	</style>
+</head>
+<body class="special-dashboard">
+<main class="shell">
+	<nav class="topbar">
+		<a class="brand" href="{% url 'home' %}"><span class="brand-mark">Y</span>YOVAA</a>
+		<div style="display: flex; gap: 10px; flex-wrap: wrap;">
+			<a class="button secondary" href="{% url 'home' %}">&larr; Back to Home</a>
+			<a class="button" href="{% url 'account_logout' %}">Log out</a>
+		</div>
+	</nav>
+	<section class="dashboard-hero">
+		<div>
+			<span class="eyebrow">Permanent staff dashboard</span>
+			<h1>Welcome, {{ staff.name }}.</h1>
+			<p>Your staff record is verified. Generate your free all-bus pass whenever you are ready.</p>
+			<div class="staff-summary">
+				<span class="staff-chip">Staff ID: {{ staff.staff_number }}</span>
+				<span class="staff-chip">{{ staff.designation }}</span>
+				<span class="staff-chip">{{ staff.workplace }}</span>
+			</div>
+		</div>
+		<section class="generate-card">
+			<span class="eyebrow" style="color: var(--yellow);">Ready to issue</span>
+			<h2>Generate your pass</h2>
+			<p>Review your details, upload the required documents, and receive your digital special pass.</p>
+			<a class="button" href="{% url 'special_generate_pass' %}">Generate Pass <span aria-hidden="true">&rarr;</span></a>
+		</section>
+	</section>
+	<p class="security-note"><strong>Free travel:</strong> this special pass is valid on all buses for eligible permanent transport staff.</p>
+</main>
+</body>
+</html>

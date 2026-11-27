@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YOVAA - Register</title>
+</head>
+<body>
+    <h1>YOVAA</h1>
+    <h2>{{ user_type|title }} Registration</h2>
+    {% if error %}<p>{{ error }}</p>{% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        {% if user_type == "COLLEGE" %}
+            <label>UMIS / Registration Number</label><br>
+            <input type="text" name="identifier" required><br><br>
+            <label>Student Name</label><br>
+            <input type="text" name="name" required><br><br>
+            <label>College Email ID</label><br>
+            <input type="email" name="email" required><br><br>
+        {% elif user_type == "DISABLED" %}
+            <label>Disability ID</label><br>
+            <input type="text" name="identifier" required><br><br>
+            <label>Name</label><br>
+            <input type="text" name="name" required><br><br>
+            <label>Phone Number</label><br>
+            <input type="tel" name="phone_number" required><br><br>
+        {% elif user_type == "SPECIAL" %}
+            <label>Staff Number</label><br>
+            <input type="text" name="identifier" required><br><br>
+            <label>Name</label><br>
+            <input type="text" name="name" required><br><br>
+            <label>Phone Number</label><br>
+            <input type="tel" name="phone_number" required><br><br>
+        {% else %}
+            <label>Name</label><br>
+            <input type="text" name="name" required><br><br>
+            <label>Phone Number</label><br>
+            <input type="tel" name="phone_number" required><br><br>
+        {% endif %}
+        <label>New Password</label><br>
+        <input type="password" name="password" required><br><br>
+        <label>Confirm Password</label><br>
+        <input type="password" name="confirm_password" required><br><br>
+        <button type="submit">Register</button>
+    </form>
+    <p><a href="{% url 'login' user_type|lower %}">Already registered? Login</a></p>
+</body>
+</html>

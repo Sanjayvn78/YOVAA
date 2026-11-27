@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YOVAA - School Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+    <style>
+        .school-dashboard { min-height: 100vh; padding-bottom: 70px; background: #f4f7fb; }
+        .school-topbar { padding: 18px 5vw; color: #fff; background: linear-gradient(110deg, #075b58, #087f78); }
+        .school-topbar-inner { display: flex; align-items: center; justify-content: space-between; max-width: 1180px; margin: 0 auto; }
+        .school-brand { display: flex; align-items: center; gap: 12px; font-size: 1.4rem; font-weight: 800; } .school-brand img { width: 42px; height: 42px; object-fit: contain; }
+        .school-home { color: #fff; text-decoration: none; font-weight: 700; }
+        .school-header { display: flex; justify-content: space-between; align-items: end; gap: 20px; max-width: 1180px; margin: 0 auto 28px; padding: 46px 0 0; }
+        .school-header h1 { margin: 6px 0 0; color: #17212b; font-size: clamp(2rem, 4vw, 3.2rem); }
+        .school-header p { margin: 8px 0 0; color: #66727d; }
+        .school-action { display: inline-flex; align-items: center; gap: 8px; padding: 13px 20px; border-radius: 10px; color: #fff; background: #087f78; text-decoration: none; font-weight: 700; box-shadow: 0 8px 18px rgba(8,127,120,.18); }
+        .school-card { max-width: 1180px; margin: 0 auto 24px; padding: 24px; border: 1px solid #dce4e1; border-radius: 16px; background: #fff; box-shadow: 0 10px 26px rgba(23,33,43,.06); }
+        .school-card h2 { margin: 0 0 18px; color: #17212b; font-size: 1.35rem; }
+        .school-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .school-stat { padding: 20px; border-left: 4px solid #087f78; border-radius: 12px; background: #f4f7fb; } .school-stat small { color: #66727d; font-weight: 700; } .school-stat strong { display: block; margin-top: 6px; color: #087f78; font-size: 2rem; }
+        .school-list-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 4px; } .school-list-note { color: #66727d; font-size: .9rem; }
+        .school-table { width: 100%; border-collapse: collapse; } .school-table th, .school-table td { padding: 14px 10px; border-top: 1px solid #e8edf0; text-align: left; } .school-table th { color: #66727d; font-size: .76rem; text-transform: uppercase; letter-spacing: .08em; } .school-table small { display: block; margin-top: 4px; color: #66727d; }
+        .school-status { display: inline-block; padding: 7px 10px; border-radius: 999px; color: #087f5b; background: #e6f8ef; font-size: .78rem; font-weight: 700; }
+        @media (max-width: 700px) { .school-header { display: block; } .school-action { display: inline-block; margin-top: 18px; } .school-stats { grid-template-columns: 1fr; } .school-card { overflow-x: auto; } .school-table { min-width: 720px; } }
+    </style>
+</head>
+<body>
+<main class="school-dashboard">
+    <header class="school-topbar"><div class="school-topbar-inner"><div class="school-brand"><img src="{% static 'images/yovaa-transit-logo.svg' %}" alt="YOVAA"><span>YOVAA School Administration</span></div><a class="school-home" href="{% url 'admin_logout' %}">Logout</a></div></header>
+    <header class="school-header"><div><span class="eyebrow">{{ school_name }} · {{ admin_name }}</span><h1>School Admin Dashboard</h1><p>Manage only your assigned school student records.</p></div><a class="school-action" href="{% url 'school_apply' %}">＋ New Application</a></header>
+    <section class="school-card"><div class="school-stats"><article class="school-stat"><small>Total Applications</small><strong>{{ applications|length }}</strong></article><article class="school-stat"><small>Payment Pending</small><strong>{{ pending_count }}</strong></article><article class="school-stat"><small>Passes Generated</small><strong>{{ epass_count }}</strong></article></div></section>
+    <section class="school-card"><div class="school-list-head"><h2>Application List</h2><span class="school-list-note">Latest school pass activity</span></div>{% if applications %}<table class="school-table"><thead><tr><th>Student</th><th>EMIS ID</th><th>Route</th><th>Status</th><th>Validity</th><th>Action</th></tr></thead><tbody>{% for application in applications %}<tr><td><strong>{{ application.full_name }}</strong><small>{{ application.application_number }}</small></td><td>{{ application.verification_id }}</td><td>{{ application.start_point }} to {{ application.destination_point }}<small>{{ application.route }}</small></td><td><span class="school-status">{{ application.get_status_display }}</span></td><td>{% if application.epass %}{{ application.epass.valid_until|default:application.epass.expiry_date|date:"d M Y" }}{% else %}-{% endif %}</td><td>{% if application.epass and application.status == "PAYMENT_COMPLETED" %}<a class="school-action" href="{% url 'school_epass' application.id %}">View E-Pass</a>{% else %}-{% endif %}</td></tr>{% endfor %}</tbody></table>{% else %}<p>No school applications yet. Click New Application to begin.</p>{% endif %}</section>
+</main>
+</body>
+</html>

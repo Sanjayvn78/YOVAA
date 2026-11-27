@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - Travel Details</title>
+</head>
+<body><main class="page-shell"><header class="page-header">{% include "partials/yovaa_brand.html" %}<span class="eyebrow">General pass · Step 2 of 2</span></header><section class="card form-card flow-card">
+    <div class="flow-intro"><div><span class="eyebrow">Travel &amp; documents</span><h1>Complete your application</h1><p>Choose your route, add your documents, and submit for payment review.</p></div><span class="flow-step">02 / 02</span></div>
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <section class="form-section"><h2>Travel details</h2><p>Select a state, district, route, and two stops from the verified network.</p>{% include "users/route_fields.html" %}<div class="field-grid"><div class="field"><label for="duration">Pass duration</label><select id="duration" name="duration"><option value="1">1 month</option></select></div></div></section>
+        <section class="form-section"><h2>Required documents</h2><p>Upload clear files so Transport Admin can verify your application quickly.</p><div class="upload-grid"><div class="upload-field"><label for="applicant-photo">Applicant photo</label><input id="applicant-photo" type="file" name="applicant_photo" accept=".jpg,.jpeg,.png" required><small>JPG or PNG</small></div><div class="upload-field"><label for="aadhaar-document">Address proof</label><input id="aadhaar-document" type="file" name="aadhaar_document" accept=".pdf" required><small>PDF only</small></div><div class="upload-field"><label for="signature-document">Signature</label><input id="signature-document" type="file" name="signature_document" accept=".pdf" required><small>PDF only</small></div></div></section>
+        <div class="form-actions"><p class="form-note">After submission, continue to payment.</p><button type="submit">Submit application <span aria-hidden="true">→</span></button></div>
+    </form>
+</section></main></body>
+</html>

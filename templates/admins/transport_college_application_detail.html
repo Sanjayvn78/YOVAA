@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YOVAA - College Application</title>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+    <style>
+        body { margin: 0; background: #f3f5f8; color: #111827; font-family: 'Segoe UI', Arial, sans-serif; }
+        .detail-page { width: min(100% - 32px, 980px); margin: 0 auto; padding: 36px 0 60px; }
+        .detail-header { display: flex; justify-content: space-between; align-items: end; gap: 18px; margin-bottom: 24px; }
+        .detail-header h1 { margin: 6px 0 0; font-size: clamp(2rem, 4vw, 3rem); } .detail-header p { margin: 6px 0 0; color: #667085; }
+        .back-link { color: #1769d1; text-decoration: none; font-weight: 700; }
+        .detail-card { margin-bottom: 20px; padding: 24px; border: 1px solid #e0e5ec; border-radius: 16px; background: #fff; box-shadow: 0 8px 20px rgba(10,21,36,.05); }
+        .detail-card h2 { margin: 0 0 18px; font-size: 1.25rem; } .detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+        .detail-item small { display: block; color: #667085; } .detail-item strong { display: block; margin-top: 4px; }
+        .document-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .document { padding: 16px; border: 1px solid #e5e9ef; border-radius: 12px; background: #f8fafc; } .document strong { display: block; margin-bottom: 10px; }
+        .document a { color: #1769d1; font-weight: 700; text-decoration: none; } .document img { display: block; width: 100%; max-height: 180px; margin-bottom: 12px; object-fit: contain; border-radius: 8px; background: #fff; }
+        .missing { color: #98a2b3; font-size: .9rem; }
+        @media (max-width: 700px) { .detail-header { display: block; } .detail-grid, .document-grid { grid-template-columns: 1fr; } .back-link { display: inline-block; margin-top: 16px; } }
+    </style>
+</head>
+<body>
+<main class="detail-page">
+    <header class="detail-header"><div><span class="eyebrow">Transport application</span><h1>{{ application.full_name }}</h1><p>{{ application.application_number }} · {{ application.get_status_display }}</p></div><div><a class="back-link" href="{% url 'transport_college_portal' %}">Back to Applications</a> <a class="back-link" href="{% url 'transport_admin' %}">Dashboard</a> <a class="back-link" href="{% url 'admin_logout' %}">Logout</a></div></header>
+    <section class="detail-card"><h2>Student and Travel Details</h2><div class="detail-grid"><div class="detail-item"><small>UMIS Number</small><strong>{{ application.verification_id|default:"-" }}</strong></div><div class="detail-item"><small>College</small><strong>{{ application.college_name|default:"-" }}</strong></div><div class="detail-item"><small>Route</small><strong>{{ application.route|default:"-" }}</strong></div><div class="detail-item"><small>Boarding Point</small><strong>{{ application.start_point|default:"-" }}</strong></div><div class="detail-item"><small>Destination</small><strong>{{ application.destination_point|default:"-" }}</strong></div><div class="detail-item"><small>Date of Birth</small><strong>{{ application.date_of_birth|default:"-" }}</strong></div></div></section>
+    <section class="detail-card"><h2>Uploaded Documents</h2><div class="document-grid"><article class="document"><strong>Applicant Photo</strong>{% if application.applicant_photo %}<img src="{{ application.applicant_photo.url }}" alt="Applicant photo"><a href="{{ application.applicant_photo.url }}" target="_blank">Open photo</a>{% else %}<span class="missing">Photo not uploaded</span>{% endif %}</article><article class="document"><strong>Address Proof / Aadhaar</strong>{% if application.aadhaar_document %}<a href="{{ application.aadhaar_document.url }}" target="_blank">View address proof PDF</a>{% else %}<span class="missing">Address proof not uploaded</span>{% endif %}</article><article class="document"><strong>Signature</strong>{% if application.signature_document %}<a href="{{ application.signature_document.url }}" target="_blank">View signature PDF</a>{% else %}<span class="missing">Signature not uploaded</span>{% endif %}</article></div></section>
+</main>
+</body>
+</html>

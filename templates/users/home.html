@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+    <title>YOVAA - Users</title>
+</head>
+<body>
+<main class="shell">
+    <nav class="topbar"><a class="brand" href="/">YOVAA</a><span class="eyebrow">Users</span></nav>
+    <h1>Choose your pass type</h1>
+    <p>Register or login through the module that matches your pass.</p>
+
+    <section class="module-grid">
+        <article class="module">
+            <span class="tag">01</span><h2>College Student</h2>
+            <p>UMIS verified college pass.</p>
+            <a href="/accounts/college/register/">Register</a> ·
+            <a href="/accounts/college/login/">Login</a>
+        </article>
+        <article class="module">
+            <span class="tag">02</span><h2>Disabled Person</h2>
+            <p>Disability dataset verified pass.</p>
+            <a href="/accounts/disabled/register/">Register</a> ·
+            <a href="/accounts/disabled/login/">Login</a>
+        </article>
+        <article class="module">
+            <span class="tag">03</span><h2>General User</h2>
+            <p>Direct registration for a general pass.</p>
+            <a href="/accounts/general/register/">Register</a> ·
+            <a href="/accounts/general/login/">Login</a>
+        </article>
+        <article class="module">
+            <span class="tag">04</span><h2>Special User</h2>
+            <p>Eligible transport staff pass.</p>
+            <a href="/accounts/special/login/">Login</a>
+        </article>
+    </section>
+</main>
+</body>
+</html>

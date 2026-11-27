@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - QR Scanner</title>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+
+    <h1>YOVAA QR Scanner</h1>
+    <p>Scan the passenger's YOVAA bus pass QR code.</p>
+
+    <div id="reader" style="width:350px;"></div>
+    <div id="result"></div>
+
+    <script>
+        function onScanSuccess(decodedText) {
+            document.getElementById("result").innerHTML =
+                "<p>QR Detected</p><p>" + decodedText + "</p>";
+            window.location.href =
+                "/users/verify-qr/?data=" + encodeURIComponent(decodedText);
+        }
+
+        const scanner = new Html5QrcodeScanner(
+            "reader",
+            { fps: 10, qrbox: 250 }
+        );
+        scanner.render(onScanSuccess);
+    </script>
+
+</body>
+</html>

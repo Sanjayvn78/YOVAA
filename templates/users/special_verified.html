@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+    <title>YOVAA - Staff Verification</title>
+</head>
+<body>
+<main class="page-shell"><header class="page-header">
+    {% include "partials/yovaa_brand.html" %}
+    <span class="eyebrow">Special pass verification</span>
+</header>
+<section class="card verification-card">
+    <div class="success-icon">✓</div>
+    <h1>Staff ID Verified</h1>
+    <p>Your eligible Government Transport Staff record was found.</p>
+    <div class="detail-grid">
+        <div class="detail-item"><small>Staff ID</small><strong>{{ staff.staff_number }}</strong></div>
+        <div class="detail-item"><small>Name</small><strong>{{ staff.name }}</strong></div>
+        <div class="detail-item"><small>Designation</small><strong>{{ staff.designation }}</strong></div>
+        <div class="detail-item"><small>Department</small><strong>{{ staff.department }}</strong></div>
+        <div class="detail-item"><small>Workplace</small><strong>{{ staff.workplace }}</strong></div>
+        <div class="detail-item"><small>District</small><strong>{{ staff.district|default:"-" }}</strong></div>
+    </div>
+    <form method="POST" action="{% url 'special_details' %}">
+        {% csrf_token %}
+        <input type="hidden" name="staff_id" value="{{ staff.id }}">
+        <button type="submit">Continue Registration</button>
+    </form>
+</section></main>
+</body>
+</html>

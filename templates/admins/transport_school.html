@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YOVAA - School Student Portal</title>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; background: #f3f5f8; color: #111827; font-family: 'Segoe UI', Arial, sans-serif; }
+        .portal-shell { display: flex; min-height: 100vh; }
+        .portal-sidebar { width: 270px; flex: 0 0 270px; padding: 22px 18px; color: #eaf1ff; background: #0e1c2d; }
+        .portal-brand { display: flex; align-items: center; gap: 12px; margin: 8px 8px 28px; color: #fff; font-size: 2rem; font-weight: 800; }
+        .portal-brand img { width: 34px; height: 34px; object-fit: contain; }
+        .portal-sidebar-title { margin: 22px 10px 12px; color: #8a9ab0; font-size: .72rem; letter-spacing: .15em; text-transform: uppercase; font-weight: 700; }
+        .portal-menu { display: grid; gap: 8px; }
+        .portal-menu a { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; color: #dfeafc; text-decoration: none; font-weight: 600; }
+        .portal-menu a.active { background: #2e6ae6; color: #fff; }
+        .portal-menu-icon { width: 18px; text-align: center; }
+        .portal-profile { margin-top: 36px; padding: 14px 12px; border-radius: 12px; background: rgba(255,255,255,.04); }
+        .portal-profile strong, .portal-profile small { display: block; }
+        .portal-profile strong { color: #fff; } .portal-profile small { margin-top: 4px; color: #a3b3c8; }
+        .portal-main { flex: 1; min-width: 0; padding: 26px 28px 38px; }
+        .portal-header { display: flex; justify-content: space-between; gap: 18px; padding-bottom: 18px; border-bottom: 1px solid #dfe5ee; }
+        .portal-header h1 { margin: 0; font-size: 2.2rem; font-weight: 800; } .portal-header p { margin: 4px 0 0; color: #6b7280; }
+        .portal-admin { display: flex; align-items: center; gap: 12px; font-weight: 700; } .portal-avatar { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; color: #fff; background: #2f6ae6; }
+        .portal-page { padding-top: 34px; } .portal-page h2 { margin: 0 0 24px; font-size: 2rem; }
+        .portal-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 24px; }
+        .stat, .panel { border: 1px solid #e0e5ec; border-radius: 14px; background: #fff; box-shadow: 0 8px 20px rgba(10,21,36,.05); }
+        .stat { padding: 22px; } .stat small { color: #667085; font-weight: 700; } .stat strong { display: block; margin-top: 12px; font-size: 2rem; }
+        .panel { overflow-x: auto; } .panel h3 { margin: 0; padding: 22px; font-size: 1.2rem; } table { width: 100%; min-width: 760px; border-collapse: collapse; } th, td { padding: 15px 22px; border-top: 1px solid #edf0f4; text-align: left; } th { color: #667085; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; } td strong, td small { display: block; } td small { margin-top: 4px; color: #667085; }
+        .status { display: inline-block; padding: 8px 12px; border-radius: 999px; color: #087f5b; background: #e6f8ef; font-size: .78rem; font-weight: 700; }
+        @media (max-width: 760px) { .portal-shell { display: block; } .portal-sidebar { width: 100%; } .portal-stats { grid-template-columns: 1fr; } .portal-main { padding: 22px 16px; } .portal-header { display: block; } .portal-admin { margin-top: 18px; } }
+    </style>
+</head>
+<body>
+<div class="portal-shell">
+    <aside class="portal-sidebar">
+        <div class="portal-brand"><img src="{% static 'images/yovaa-transit-logo.svg' %}" alt="YOVAA"><span>YOVAA<br>Transport</span></div>
+        <div class="portal-sidebar-title">School Students</div>
+        <nav class="portal-menu">
+            <a class="{% if active_section == 'applications' %}active{% endif %}" href="{% url 'transport_school_portal' %}?section=applications"><span class="portal-menu-icon">◉</span> Application List</a>
+            <a class="{% if active_section == 'payments' %}active{% endif %}" href="{% url 'transport_school_portal' %}?section=payments"><span class="portal-menu-icon">₹</span> Payment List</a>
+        </nav>
+        <div class="portal-profile"><strong>transportadmin</strong><small>System Administrator</small></div>
+    </aside>
+    <main class="portal-main">
+        <header class="portal-header"><div><h1>School Student Portal</h1><p>Manage school pass applications and generated e-passes</p></div><div class="portal-admin"><span class="portal-avatar">TA</span><span>transportadmin<br><small>Administrator</small></span></div><div><a class="button secondary" href="{% url 'transport_admin' %}">Dashboard</a> <a class="button" href="{% url 'admin_logout' %}">Logout</a></div></header>
+        <section class="portal-page"><h2>{% if active_section == 'payments' %}Payment List{% else %}School Applications{% endif %}</h2>
+            <div class="portal-stats"><article class="stat"><small>Total applications</small><strong>{{ applications|length }}</strong></article><article class="stat"><small>Payment completed</small><strong>{{ completed_count }}</strong></article><article class="stat"><small>E-Passes generated</small><strong>{{ epass_count }}</strong></article></div>
+            <section class="panel">{% if active_section == 'payments' %}<h3>Payment List</h3>{% if payments %}<table><thead><tr><th>Application</th><th>Student</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead><tbody>{% for payment in payments %}<tr><td>{{ payment.application.application_number }}</td><td>{{ payment.application.full_name }}</td><td>&#8377;{{ payment.amount }}</td><td>{{ payment.get_payment_method_display }}</td><td><span class="status">{{ payment.get_status_display }}</span></td></tr>{% endfor %}</tbody></table>{% else %}<p style="padding:22px;">No school payments found.</p>{% endif %}{% else %}<h3>Application List</h3>{% if applications %}<table><thead><tr><th>Student</th><th>School</th><th>Route</th><th>Status</th><th>Pass validity</th></tr></thead><tbody>{% for application in applications %}<tr><td><strong>{{ application.full_name }}</strong><small>{{ application.application_number }}</small></td><td>{{ application.college_name|default:"School student" }}</td><td>{{ application.start_point }} to {{ application.destination_point }}<small>{{ application.route }}</small></td><td><span class="status">{{ application.get_status_display }}</span></td><td>{% if application.epass %}{{ application.epass.renewal_valid_until|date:"d M Y" }}{% else %}-{% endif %}</td></tr>{% endfor %}</tbody></table>{% else %}<p style="padding:22px;">No school applications found.</p>{% endif %}{% endif %}</section>
+        </section>
+        <section class="panel" style="margin-top: 22px; padding: 20px;">
+            <h3>Pending Payment Verification</h3>
+            {% for payment in payments %}
+                {% if payment.status == 'PENDING' %}
+                    <p>{{ payment.application.application_number }} - {{ payment.application.full_name }} - &#8377;{{ payment.amount }}
+                        <form method="POST" action="{% url 'transport_verify_payment' payment.application.id %}" style="display: inline;">{% csrf_token %}<button type="submit">Verify Payment</button></form>
+                    </p>
+                {% endif %}
+            {% empty %}
+                <p>No pending school payments.</p>
+            {% endfor %}
+        </section>
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="650" viewBox="0 0 720 650">
+  <rect width="720" height="650" fill="#d7e9ff" stroke="#6f8eaf" stroke-width="2"/>
+  <style>
+    .heading { font: bold 24px Arial, sans-serif; fill: #174a7e; }
+    .subheading { font: bold 21px Arial, sans-serif; fill: #174a7e; }
+    .body { font: 17px Arial, sans-serif; fill: #111; }
+  </style>
+  <text x="360" y="38" text-anchor="middle" class="heading">3. Economic &amp; Financial Feasibility</text>
+  <circle cx="24" cy="76" r="3" fill="#111"/>
+  <text x="38" y="82" class="body"><tspan font-weight="bold">Cost Effective:</tspan> Using open-source technologies</text>
+  <text x="38" y="105" class="body">helps reduce development cost.</text>
+  <circle cx="24" cy="135" r="3" fill="#111"/>
+  <text x="38" y="141" class="body"><tspan font-weight="bold">Long Term Savings:</tspan> Reduces paperwork, printing</text>
+  <text x="38" y="164" class="body">and staff workload.</text>
+  <circle cx="24" cy="194" r="3" fill="#111"/>
+  <text x="38" y="200" class="body"><tspan font-weight="bold">Revenue Potential:</tspan> Online processing can support</text>
+  <text x="38" y="223" class="body">small service fees and institutional subscriptions.</text>
+  <circle cx="24" cy="253" r="3" fill="#111"/>
+  <text x="38" y="259" class="body"><tspan font-weight="bold">Scalable Investment:</tspan> The same system can later be</text>
+  <text x="38" y="282" class="body">used by more colleges and transport departments.</text>
+  <line x1="30" y1="315" x2="690" y2="315" stroke="#7a9abb" stroke-width="2"/>
+  <text x="360" y="355" text-anchor="middle" class="subheading">4. Profit Generation &amp; Sustainability</text>
+  <circle cx="24" cy="395" r="3" fill="#111"/>
+  <text x="38" y="401" class="body"><tspan font-weight="bold">Service Revenue:</tspan> Nominal digital pass and renewal</text>
+  <text x="38" y="424" class="body">charges can create a steady income stream.</text>
+  <circle cx="24" cy="454" r="3" fill="#111"/>
+  <text x="38" y="460" class="body"><tspan font-weight="bold">Administrative Savings:</tspan> Less manual verification</text>
+  <text x="38" y="483" class="body">reduces recurring operational expenses.</text>
+  <circle cx="24" cy="513" r="3" fill="#111"/>
+  <text x="38" y="519" class="body"><tspan font-weight="bold">Partner Support:</tspan> Colleges and transport departments</text>
+  <text x="38" y="542" class="body">can contribute through annual platform plans.</text>
+  <circle cx="24" cy="572" r="3" fill="#111"/>
+  <text x="38" y="578" class="body"><tspan font-weight="bold">Sustainable Growth:</tspan> Savings and recurring revenue</text>
+  <text x="38" y="601" class="body">can help the project reach break-even quickly.</text>
+</svg>

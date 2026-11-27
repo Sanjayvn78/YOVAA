@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - School Pass</title>
+</head>
+<body>
+
+    <h1>Create School Bus Pass</h1>
+    <h2>Verified Student</h2>
+
+    <p><strong>Student ID:</strong> {{ student.student_id }}</p>
+    <p><strong>Name:</strong> {{ student.student_name }}</p>
+    <p><strong>School:</strong> {{ student.school_name }}</p>
+
+    <hr>
+    <h3>Travel Details</h3>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label>Route</label><br>
+        <input type="text" name="route" required>
+        <br><br>
+
+        <label>Starting Point</label><br>
+        <input type="text" name="start_point" required>
+        <br><br>
+
+        <label>Destination</label><br>
+        <input type="text" name="destination_point" required>
+        <br><br>
+
+        <hr>
+        <h3>Required Documents</h3>
+        <label>Applicant Photo (JPG / PNG)</label><br>
+        <input type="file" name="applicant_photo" accept=".jpg,.jpeg,.png" required>
+        <br><br>
+        <label>Address Proof (PDF)</label><br>
+        <input type="file" name="aadhaar_document" accept="application/pdf,.pdf" required>
+        <br><br>
+        <label>Signature (PDF)</label><br>
+        <input type="file" name="signature_document" accept="application/pdf,.pdf" required>
+        <br><br>
+
+        <button type="submit">Submit to Transport Admin</button>
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+    <title>YOVAA - Disabled Person Pass</title>
+</head>
+<body>
+<main class="page-shell"><header class="page-header">{% include "partials/yovaa_brand.html" %}<span class="eyebrow">Disability application</span></header>
+<section class="card form-card">
+    <h1>Disabled Person Bus Pass</h1>
+    <p>Your verified details are ready. This pass is valid throughout the selected district.</p>
+    {% if error %}<p class="form-error">{{ error }}</p>{% endif %}
+    <div class="detail-grid">
+        <div class="detail-item"><small>Disability ID</small><strong>{{ person.disability_id }}</strong></div>
+        <div class="detail-item"><small>Name</small><strong>{{ person.name }}</strong></div>
+        <div class="detail-item"><small>Disability Type</small><strong>{{ person.disability_type }}</strong></div>
+        <div class="detail-item"><small>District</small><strong>{{ person.district|default:"-" }}</strong></div>
+    </div>
+    <p class="verification-state">Full district travel: {{ person.district|default:"Verified district" }}</p>
+    <hr>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="state" value="{{ person.state }}">
+        <input type="hidden" name="district" value="{{ person.district }}">
+        <hr>
+        <h2>Required Documents</h2>
+        <label for="applicant-photo">Applicant Photo (JPG / PNG)</label>
+        <input id="applicant-photo" type="file" name="applicant_photo" accept=".jpg,.jpeg,.png" required>
+        <label for="aadhaar-document">Address Proof (PDF)</label>
+        <input id="aadhaar-document" type="file" name="aadhaar_document" accept="application/pdf,.pdf" required>
+        <label for="signature-document">Signature (PDF)</label>
+        <input id="signature-document" type="file" name="signature_document" accept="application/pdf,.pdf" required>
+        <button type="submit">Submit Application</button>
+    </form>
+</section></main>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - Verify Payment</title>
+</head>
+<body>
+<main class="page-shell"><header class="page-header">{% include "partials/yovaa_brand.html" %}<span class="eyebrow">General pass · review</span></header><section class="card form-card verification-card">
+    <div class="success-icon">✓</div><h1>Payment submitted</h1>
+    {% if message %}
+        <p>{{ message }}</p>
+    {% else %}
+        <p class="verification-state">Your payment of &#8377;{{ payment.amount }} is awaiting Transport Admin verification.</p><p>Your e-pass will be generated as soon as the payment is approved.</p>
+    {% endif %}
+    <div class="action-row"><a class="button secondary" href="{% url 'account_dashboard' %}">Back to Dashboard</a></div>
+</section></main>
+</body>
+</html>

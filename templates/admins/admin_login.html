@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>YOVAA - {{ admin_type|title }} Admin Login</title>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+</head>
+<body>
+<main class="page-shell">
+    <header class="page-header">
+        {% include "partials/yovaa_brand.html" %}
+        <span class="eyebrow">{{ admin_type|title }} administration</span>
+    </header>
+    <section class="card form-card">
+        <div class="flow-intro">
+            <span class="eyebrow">Secure workspace</span>
+            <h1>{{ admin_type|title }} Admin Login</h1>
+            <p>Sign in with the credentials assigned to your institution.</p>
+        </div>
+        {% if error %}<p class="error">{{ error }}</p>{% endif %}
+        <form method="POST">
+            {% csrf_token %}
+            <div class="field-grid">
+                <div class="field field-wide"><label for="username">Username</label><input id="username" name="username" autocomplete="username" required></div>
+                <div class="field field-wide"><label for="password">Password</label><input id="password" type="password" name="password" autocomplete="current-password" required></div>
+            </div>
+            <div class="form-actions"><a href="{% url 'admins_home' %}">Back to Admin Center</a><button type="submit">Sign in</button></div>
+        </form>
+    </section>
+</main>
+</body>
+</html>

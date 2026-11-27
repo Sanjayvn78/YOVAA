@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YOVAA | Digital Bus Passes</title>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+</head>
+<body class="home-page">
+<main class="shell">
+    <nav class="topbar">
+        {% include "partials/yovaa_brand.html" %}
+        <span class="eyebrow">Move with confidence</span>
+    </nav>
+    <section class="hero">
+        <div class="hero-copy">
+            <span class="eyebrow">Digital mobility, made simple</span>
+            <h1>One pass.<br><span>Every journey.</span></h1>
+            <p>Apply, verify, pay and carry your bus pass digitally, with every step connected to the right official dataset.</p>
+            <div class="home-cta"><a class="button" href="/users/">Explore user services</a><a class="button admin" href="/users/admin/">Open Admin Portal</a></div>
+        </div>
+        <div class="hero-panel">
+            <span class="eyebrow home-network-label">YOVAA network</span>
+            <h2>Verified travel for real life.</h2>
+            <p class="home-network-copy">UMIS, EMIS, disability and staff verification flow into one clear approval path.</p>
+            <p class="home-network-status">VALID · SECURE · DIGITAL</p>
+        </div>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+    <title>YOVAA - Special Pass</title>
+</head>
+<body>
+<main class="page-shell"><header class="page-header">
+    {% include "partials/yovaa_brand.html" %}
+    <span class="eyebrow">Special pass verification</span>
+</header>
+<section class="card form-card">
+    <h1>Special Staff Bus Pass</h1>
+    <p>Enter your Government Transport Staff ID to verify your details and register for a pass.</p>
+    {% if error %}<p class="form-error">{{ error }}</p>{% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        <label for="staff_number">Staff ID</label>
+        <input id="staff_number" type="text" name="staff_number" required>
+        <button type="submit">Verify Staff ID</button>
+    </form>
+</section></main>
+</body>
+</html>

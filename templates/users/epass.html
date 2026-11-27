@@ -1,0 +1,555 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOVAA - E-Pass</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body.pass-view {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #eef3f8;
+            padding: 30px;
+        }
+
+        .pass-card {
+            width: 1000px;
+            max-width: 100%;
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            border: 1px solid #d5e0ec;
+        }
+
+        .pass-header {
+            min-height: 145px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 25px 35px;
+            border-bottom: 1px solid #d9e3ed;
+            background: linear-gradient(180deg, #f9fbff 0%, #edf5ff 100%);
+        }
+
+        .brand-block {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .brand-wordmark {
+            font-size: 65px;
+            font-weight: 900;
+            color: #123f73;
+            letter-spacing: 2px;
+            line-height: 1;
+        }
+
+        .brand-wordmark span {
+            color: #1976d2;
+        }
+
+        .brand-subline {
+            font-size: 15px;
+            color: #234d78;
+            margin-top: -5px;
+        }
+
+        .divider {
+            width: 2px;
+            height: 75px;
+            background: #18548b;
+        }
+
+        .pass-title-wrap {
+            text-align: center;
+            color: #163e68;
+        }
+
+        .pass-title-wrap h1 {
+            font-size: 30px;
+            letter-spacing: 1px;
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        .pass-title-wrap h2 {
+            margin-top: 8px;
+            font-size: 21px;
+            font-weight: 500;
+            color: #285b8c;
+        }
+
+        .bus-mini-icon {
+            font-size: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ride-tag {
+            text-align: center;
+            color: #163e68;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        .pass-main-layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+            padding: 35px;
+            align-items: center;
+        }
+
+        .pass-details-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .detail-row {
+            display: grid;
+            grid-template-columns: 190px 25px 1fr;
+            align-items: center;
+            font-size: 19px;
+        }
+
+        .detail-label {
+            color: #174a7c;
+            font-weight: 700;
+        }
+
+        .detail-separator {
+            color: #163e68;
+            font-weight: bold;
+        }
+
+        .detail-value {
+            color: #101d35;
+            font-weight: 700;
+            word-break: break-word;
+        }
+
+        .pass-visuals {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .student-photo-box {
+            width: 170px;
+            height: 190px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid #1b5c98;
+            background: #e9eef4;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .student-photo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            font-weight: 800;
+            color: #4a6c89;
+        }
+
+        .qr-box {
+            width: 170px;
+            height: 170px;
+            border: 2px solid #1870bd;
+            border-radius: 12px;
+            padding: 10px;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .qr-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .scan-text {
+            font-size: 17px;
+            font-weight: 700;
+            color: #142f54;
+        }
+
+        .pass-chip-row {
+            width: 100%;
+            display: flex;
+            background: #e2eefb;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 0 35px 0;
+            border: 1px solid #cfe0f3;
+        }
+
+        .chip-box {
+            width: 50%;
+            padding: 18px;
+            min-height: 80px;
+        }
+
+        .chip-box:first-child {
+            border-right: 2px solid #2874b8;
+        }
+
+        .chip-box small {
+            display: block;
+            font-size: 15px;
+            color: #234d78;
+            margin-bottom: 8px;
+        }
+
+        .chip-box strong {
+            font-size: 18px;
+            color: #102847;
+        }
+
+        .pass-actions {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding: 18px 35px 28px;
+        }
+
+        .pass-back,
+        .pass-download {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-weight: 700;
+            padding: 12px 18px;
+            border-radius: 12px;
+            transition: 0.2s ease;
+            border: 1px solid #bdd5ef;
+            background: #edf5ff;
+            color: #123f73;
+        }
+
+        .pass-download {
+            background: linear-gradient(135deg, #145ea7 0%, #0e4988 100%);
+            border-color: #145ea7;
+            color: white;
+            box-shadow: 0 10px 20px rgba(20, 94, 167, 0.2);
+        }
+
+        .pass-back:hover,
+        .pass-download:hover {
+            transform: translateY(-1px);
+        }
+
+        .pass-footer-bar {
+            min-height: 115px;
+            background: #123f73;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 35px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer-bus-mark {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: white;
+            color: #123f73;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 25px;
+        }
+
+        .footer-brand-main {
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .footer-brand-sub {
+            font-size: 15px;
+            margin-top: 3px;
+            opacity: 0.9;
+        }
+
+        .footer-divider {
+            width: 2px;
+            height: 60px;
+            background: rgba(255,255,255,0.6);
+        }
+
+        .footer-slogan {
+            font-size: 22px;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        .footer-bus {
+            font-size: 55px;
+        }
+
+        @media (max-width: 900px) {
+            body.pass-view {
+                padding: 15px;
+            }
+
+            .pass-header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .brand-block {
+                flex-direction: column;
+            }
+
+            .divider {
+                display: none;
+            }
+
+            .pass-main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .pass-visuals {
+                order: -1;
+            }
+
+            .detail-row {
+                grid-template-columns: 130px 20px 1fr;
+                font-size: 15px;
+            }
+
+            .pass-chip-row {
+                margin: 0 18px;
+            }
+
+            .pass-actions {
+                padding: 18px 18px 28px;
+            }
+
+            .pass-footer-bar {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .footer-divider {
+                display: none;
+            }
+        }
+
+        @media print {
+            body.pass-view {
+                padding: 0;
+                background: white;
+            }
+            .pass-actions {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="pass-view">
+    <div class="pass-card" id="pass-export-area">
+        <div class="pass-header">
+            <div class="brand-block">
+                <div>
+                    <div class="brand-wordmark">Y<span>O</span>VAA</div>
+                    <div class="brand-subline">Your Journey &nbsp; Our Support</div>
+                </div>
+                <div class="divider"></div>
+                <div class="pass-title-wrap">
+                    <h1>UNIFIED BUS PASS SYSTEM</h1>
+                    <h2>STUDENT E-PASS</h2>
+                </div>
+            </div>
+
+            <div>
+                <div class="bus-mini-icon">🚌</div>
+                <div class="ride-tag">Safe Ride &nbsp; Bright Future</div>
+            </div>
+        </div>
+
+        <div class="pass-main-layout">
+            <div class="pass-details-panel">
+                <div class="detail-row">
+                    <div class="detail-label">👤 Name</div>
+                    <div class="detail-separator">:</div>
+                    <div class="detail-value">{{ application.full_name }}</div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">📅 Pass Issued On</div>
+                    <div class="detail-separator">:</div>
+                    <div class="detail-value">{{ pass_obj.issue_date|date:"d M Y"|default:"-" }}</div>
+                </div>
+
+                {% if application.pass_type == "COLLEGE" %}
+                    <div class="detail-row">
+                        <div class="detail-label">🪪 UMIS Number</div>
+                        <div class="detail-separator">:</div>
+                        <div class="detail-value">{{ application.verification_id|default:application.registration_number }}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">🎓 Reg Number</div>
+                        <div class="detail-separator">:</div>
+                        <div class="detail-value">{{ application.registration_number|default:"-" }}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">🏫 College Name</div>
+                        <div class="detail-separator">:</div>
+                        <div class="detail-value">{{ application.college_name|default:"-" }}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">📚 Department</div>
+                        <div class="detail-separator">:</div>
+                        <div class="detail-value">{{ application.department|default:"-" }}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">📅 Academic Year</div>
+                        <div class="detail-separator">:</div>
+                        <div class="detail-value">{{ application.academic_year|default:"2024 - 2025" }}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">🔄 Current Year</div>
+                        <div class="detail-separator">:</div>
+                        <div class="detail-value">{{ application.current_year|default:"2nd Year" }}</div>
+                    </div>
+                {% else %}
+                    <div class="detail-row">
+                        <div class="detail-label">🆔 Pass Number</div>
+                        <div class="detail-separator">:</div>
+                        <div class="detail-value">{{ pass_obj.pass_number }}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">📄 Application No</div>
+                        <div class="detail-separator">:</div>
+                        <div class="detail-value">{{ application.application_number }}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">🚌 Pass Type</div>
+                        <div class="detail-separator">:</div>
+                        <div class="detail-value">{{ application.get_pass_type_display }}</div>
+                    </div>
+                    {% if application.pass_type == "SPECIAL" %}
+                        <div class="detail-row">
+                            <div class="detail-label">🪪 Staff ID</div>
+                            <div class="detail-separator">:</div>
+                            <div class="detail-value">{{ application.staff_number|default:"-" }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">📍 Valid Area</div>
+                            <div class="detail-separator">:</div>
+                            <div class="detail-value">All buses</div>
+                        </div>
+                    {% else %}
+                        <div class="detail-row">
+                            <div class="detail-label">🛣 Route</div>
+                            <div class="detail-separator">:</div>
+                            <div class="detail-value">{{ application.route|default:"-" }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">📍 From</div>
+                            <div class="detail-separator">:</div>
+                            <div class="detail-value">{{ application.start_point|default:"-" }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">📍 To</div>
+                            <div class="detail-separator">:</div>
+                            <div class="detail-value">{{ application.destination_point|default:"-" }}</div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <div class="pass-visuals">
+                <div class="student-photo-box">
+                    {% if application.applicant_photo %}
+                        <img src="{{ application.applicant_photo.url }}" alt="Student Photo">
+                    {% else %}
+                        <div class="photo-placeholder">No Photo</div>
+                    {% endif %}
+                </div>
+
+                <div class="qr-box">
+                    {% if pass_obj.qr_code %}
+                        <img src="{{ pass_obj.qr_code.url }}" alt="Bus Pass QR Code">
+                    {% else %}
+                        <span>{{ pass_obj.qr_data }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="scan-text">Scan to Verify</div>
+            </div>
+        </div>
+
+        <div class="pass-chip-row">
+            <div class="chip-box">
+                <small>Pass Type</small>
+                <strong>{{ application.get_pass_type_display|default:"College Student" }}</strong>
+            </div>
+            <div class="chip-box">
+                <small>Valid Till</small>
+                <strong>{{ pass_obj.valid_until|default:pass_obj.expiry_date }}</strong>
+            </div>
+        </div>
+
+        <div class="pass-footer-bar">
+            <div class="footer-brand">
+                <div class="footer-bus-mark">🚌</div>
+                <div>
+                    <div class="footer-brand-main">YOVAA</div>
+                    <div class="footer-brand-sub">Bus Pass</div>
+                </div>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-slogan">Travel Smart<br>Save Time</div>
+            <div class="footer-bus">🚌</div>
+        </div>
+
+        <div class="pass-actions">
+            {% if application.pass_type == "SPECIAL" %}
+                <a class="pass-back" href="{% url 'special_dashboard' %}">&larr; Back to Dashboard</a>
+            {% else %}
+                <a class="pass-back" href="{% url 'account_dashboard' %}">&larr; Back to Dashboard</a>
+            {% endif %}
+            <a class="pass-download" href="{% url 'epass_html_download' application.id %}">Download Your ePass</a>
+        </div>
+    </div>
+</body>
+</html>

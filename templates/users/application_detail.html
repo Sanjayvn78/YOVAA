@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/yovaa.css">
+    <title>YOVAA - Application</title>
+</head>
+<body>
+<main class="page-shell"><header class="page-header">{% include "partials/yovaa_brand.html" %}<span class="eyebrow">General pass · tracking</span></header>
+    <section class="card tracking-card">
+    <div class="tracking-detail-top"><div><span class="eyebrow">Application record</span><h2>{{ application.application_number }}</h2><p>{{ application.full_name }} · {{ application.get_application_type_display }}</p></div><span class="status">{{ application.get_status_display }}</span></div>
+    <div class="detail-grid" style="margin-top: 22px;"><div class="detail-item"><small>Pass type</small><strong>{{ application.get_pass_type_display }}</strong></div><div class="detail-item"><small>District</small><strong>{{ application.district|default:"Not provided" }}</strong></div><div class="detail-item"><small>Route</small><strong>{{ application.route }}</strong></div><div class="detail-item"><small>Travel</small><strong>{{ application.start_point }} → {{ application.destination_point }}</strong></div></div>
+
+    {% if application.pass_type == "COLLEGE" %}
+        <hr>
+        <h2>Verification Tracking</h2>
+        <div class="timeline"><div class="timeline-item"><span class="timeline-dot"></span><div><h3>Application submitted</h3><p>Details received by YOVAA.</p></div></div><div class="timeline-item {% if application.status == 'TRANSPORT_VERIFICATION' %}pending{% endif %}"><span class="timeline-dot"></span><div><h3>Transport verification</h3><p>{% if application.status == "TRANSPORT_VERIFICATION" %}In progress{% else %}Completed{% endif %}</p></div></div><div class="timeline-item {% if application.status == 'COLLEGE_VERIFICATION' %}pending{% endif %}"><span class="timeline-dot"></span><div><h3>College verification</h3><p>{% if application.status == "COLLEGE_VERIFICATION" %}In progress{% else %}Completed or not required{% endif %}</p></div></div><div class="timeline-item {% if application.status == 'PAYMENT_PENDING' %}pending{% endif %}"><span class="timeline-dot"></span><div><h3>Payment</h3><p>{% if application.status == "PAYMENT_PENDING" %}Awaiting payment verification{% elif application.status == "PAYMENT_COMPLETED" %}Completed{% else %}Pending{% endif %}</p></div></div><div class="timeline-item {% if not application.epass %}pending{% endif %}"><span class="timeline-dot"></span><div><h3>E-pass</h3><p>{% if application.epass %}Generated and ready to view{% else %}Will be generated after approval{% endif %}</p></div></div></div>
+    {% endif %}
+
+    {% if application.pass_type == "GENERAL" %}
+        <hr>
+        <h2>Verification Tracking</h2>
+        <div class="timeline"><div class="timeline-item"><span class="timeline-dot"></span><div><h3>Application submitted</h3><p>Details and documents received.</p></div></div><div class="timeline-item {% if application.status != 'PAYMENT_PENDING' and application.status != 'PAYMENT_COMPLETED' %}pending{% endif %}"><span class="timeline-dot"></span><div><h3>Documents and route review</h3><p>{% if application.status == "PAYMENT_PENDING" or application.status == "PAYMENT_COMPLETED" %}Completed{% else %}In progress{% endif %}</p></div></div><div class="timeline-item {% if application.payment.status != 'SUCCESS' %}pending{% endif %}"><span class="timeline-dot"></span><div><h3>Payment</h3><p>{% if application.payment and application.payment.status == "SUCCESS" %}Completed{% elif application.payment and application.payment.status == "PENDING" %}Submitted · awaiting Transport Admin verification{% else %}Not initiated{% endif %}</p></div></div><div class="timeline-item {% if application.status != 'PAYMENT_COMPLETED' %}pending{% endif %}"><span class="timeline-dot"></span><div><h3>Transport Admin verification</h3><p>{% if application.status == "PAYMENT_COMPLETED" %}Completed{% else %}Pending{% endif %}</p></div></div><div class="timeline-item {% if not application.epass %}pending{% endif %}"><span class="timeline-dot"></span><div><h3>E-pass</h3><p>{% if application.epass %}Available{% else %}Pending verification{% endif %}</p></div></div></div>
+    {% endif %}
+
+    {% if application.pass_type == "DISABLED" or application.pass_type == "SPECIAL" or application.pass_type == "SCHOOL" %}
+        <hr>
+        <h2>Verification Tracking</h2>
+        <div class="timeline"><div class="timeline-item"><span class="timeline-dot"></span><div><h3>Application submitted</h3><p>Details received by YOVAA.</p></div></div><div class="timeline-item {% if application.status != 'PAYMENT_PENDING' and application.status != 'PAYMENT_COMPLETED' %}pending{% endif %}"><span class="timeline-dot"></span><div><h3>Eligibility and document review</h3><p>{% if application.status == "PAYMENT_PENDING" or application.status == "PAYMENT_COMPLETED" %}Completed{% else %}In progress{% endif %}</p></div></div><div class="timeline-item {% if not application.payment or application.payment.status != 'SUCCESS' %}pending{% endif %}"><span class="timeline-dot"></span><div><h3>Payment</h3><p>{% if application.payment and application.payment.status == "SUCCESS" %}Completed{% elif application.payment %}Submitted · awaiting verification{% else %}Not initiated{% endif %}</p></div></div><div class="timeline-item {% if not application.epass %}pending{% endif %}"><span class="timeline-dot"></span><div><h3>E-pass</h3><p>{% if application.epass %}Available{% else %}Pending verification{% endif %}</p></div></div></div>
+    {% endif %}
+
+    <hr>
+    <h2>Travel Details</h2>
+    <p><strong>Route:</strong> {{ application.route }}</p>
+    <p><strong>From:</strong> {{ application.start_point }}</p>
+    <p><strong>To:</strong> {{ application.destination_point }}</p>
+
+    {% if application.remarks %}
+        <hr>
+        <h2>Remarks</h2>
+        <p>{{ application.remarks }}</p>
+    {% endif %}
+
+    {% if application.status == "PAYMENT_PENDING" %}
+        <a href="/users/payment/{{ application.id }}/"><button>Pay Now</button></a>
+    {% endif %}
+
+    {% if application.status == "PAYMENT_COMPLETED" %}
+        <a class="button" href="/users/epass/{{ application.id }}/">View E-Pass</a>
+        <a class="button secondary" href="/users/epass/{{ application.id }}/download/">Download Your ePass</a>
+    {% endif %}
+    <div class="action-row" style="margin-top: 24px;"><a class="button secondary" href="{% if request.user.profile.role == 'SCHOOL_ADMIN' or request.user.profile.role == 'COLLEGE_ADMIN' or request.user.profile.role == 'TRANSPORT_ADMIN' or request.user.profile.role == 'CONDUCTOR' %}{% url 'admin_dashboard' %}{% elif application.pass_type == 'SPECIAL' %}{% url 'special_dashboard' %}{% else %}{% url 'account_dashboard' %}{% endif %}">Back to Dashboard</a></div>
+    </section></main>
+</body>
+</html>

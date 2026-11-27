@@ -1,0 +1,14 @@
+{% load static %}
+<!DOCTYPE html>
+<html><head><link rel="stylesheet" href="{% static 'css/yovaa.css' %}"><title>YOVAA - General Pass</title></head>
+<body><main class="page-shell"><header class="page-header">{% include "partials/yovaa_brand.html" %}<span class="eyebrow">General pass application</span></header><section class="card form-card flow-card">
+    <div class="flow-intro"><div><span class="eyebrow">New application</span><h1>Apply for a General Pass</h1><p>Complete your profile, travel details, and documents in one secure application.</p></div><span class="flow-step">01 / 01</span></div>
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <section class="form-section"><h2>Personal details</h2><p>Use details that match your identity proof.</p><div class="field-grid"><div class="field"><label for="full-name">Full name</label><input id="full-name" type="text" name="full_name" autocomplete="name" required></div><div class="field"><label for="date-of-birth">Date of birth</label><input id="date-of-birth" type="date" name="date_of_birth" required></div><div class="field"><label for="phone-number">Phone number</label><input id="phone-number" type="tel" name="phone_number" autocomplete="tel" required></div><div class="field field-wide"><label for="address">Residential address</label><textarea id="address" name="address" rows="3" autocomplete="street-address" required></textarea></div></div></section>
+        <section class="form-section"><h2>Travel details</h2><p>Select a state, district, route, and boarding/destination stops.</p>{% include "users/route_fields.html" %}</section>
+        <section class="form-section"><h2>Required documents</h2><p>Upload clear files for Transport Admin verification.</p><div class="upload-grid"><div class="upload-field"><label for="applicant-photo">Applicant photo</label><input id="applicant-photo" type="file" name="applicant_photo" accept=".jpg,.jpeg,.png" required><small>JPG or PNG</small></div><div class="upload-field"><label for="aadhaar-document">Address proof</label><input id="aadhaar-document" type="file" name="aadhaar_document" accept=".pdf" required><small>PDF only</small></div><div class="upload-field"><label for="signature-document">Signature</label><input id="signature-document" type="file" name="signature_document" accept=".pdf" required><small>PDF only</small></div></div></section>
+        <div class="form-actions"><p class="form-note">After submission, you will continue to payment.</p><button type="submit">Submit application <span aria-hidden="true">→</span></button></div>
+    </form>
+</section></main></body></html>

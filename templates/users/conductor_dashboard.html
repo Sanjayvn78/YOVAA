@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YOVAA | Conductor</title>
+    <link rel="stylesheet" href="{% static 'css/yovaa.css' %}">
+</head>
+<body>
+<main class="shell">
+    <nav class="topbar">
+        {% include "partials/yovaa_brand.html" %}
+        <span class="eyebrow">Conductor workspace</span>
+    </nav>
+    <section class="hero">
+        <div class="hero-copy">
+            <span class="eyebrow">On-board verification</span>
+            <h1>Check a pass.<br><span style="color:var(--teal)">Keep moving.</span></h1>
+            <p>Scan or enter a passenger's pass number. YOVAA checks payment, activation and validity in real time.</p>
+            <a class="button" href="/users/verify-pass/">Verify a pass →</a>
+        </div>
+        <div class="hero-panel">
+            <span class="eyebrow" style="color:var(--yellow)">Conductor permissions</span>
+            <h2>Validate only.</h2>
+            <p style="color:rgba(255,255,255,.76)">No approvals, edits, payments or application decisions live here.</p>
+        </div>
+    </section>
+</main>
+</body>
+</html>
